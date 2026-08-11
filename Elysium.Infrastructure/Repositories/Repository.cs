@@ -1,4 +1,4 @@
-﻿using Elysium.Shared.Interfaces;
+﻿using Elysium.Domain.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 namespace Elysium.Infrastructure.Repositories;
@@ -16,6 +16,11 @@ public class Repository<T>(DbContext context) : IRepository<T> where T : class
     public async Task<int> CountAsync(CancellationToken cancellationToken = default)
     {
         return await _dbSet.CountAsync(cancellationToken);
+    }
+
+    public void Delete(T entity)
+    {
+        _dbSet.Remove(entity);
     }
 
     public async Task<bool> ExistsAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
@@ -39,10 +44,7 @@ public class Repository<T>(DbContext context) : IRepository<T> where T : class
         return await _dbSet.FindAsync(id , cancellationToken);
     }
 
-    public void Remove(T entity)
-    {
-        _dbSet.Remove(entity);
-    }
+    
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {

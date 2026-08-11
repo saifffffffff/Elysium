@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Elysium.Shared\Elysium.Shared.csproj" />
+    <ProjectReference Include="..\Elysium.Domain\Elysium.Domain.csproj" />
   </ItemGroup>
 
 </Project>

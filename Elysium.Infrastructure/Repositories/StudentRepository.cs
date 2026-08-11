@@ -1,6 +1,6 @@
-using Elysium.Infrastructure.Context;
-using Elysium.Shared.Interfaces;
-using Elysium.Shared.Models;
+﻿using Elysium.Infrastructure.Context;
+using Elysium.Domain.Interfaces.Repositories;
+using Elysium.Domain.Models;
 
 namespace Elysium.Infrastructure.Repositories;
 

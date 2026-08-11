@@ -1,7 +1,7 @@
 <Solution>
   <Project Path="Elysium.Api/Elysium.Api.csproj" />
   <Project Path="Elysium.Application/Elysium.Application.csproj" />
+  <Project Path="Elysium.Domain/Elysium.Domain.csproj" />
   <Project Path="Elysium.Infrastructure/Elysium.Infrastructure.csproj" />
-  <Project Path="Elysium.Shared/Elysium.Shared.csproj" />
   <Project Path="Elysium.WPF/Elysium.WPF.csproj" />
 </Solution>

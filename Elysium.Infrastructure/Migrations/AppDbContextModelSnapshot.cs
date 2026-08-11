@@ -22,7 +22,7 @@ namespace Elysium.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Elysium.Shared.Models.AiChat", b =>
+            modelBuilder.Entity("Elysium.Domain.Models.AiChat", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -40,7 +40,7 @@ namespace Elysium.Infrastructure.Migrations
                     b.ToTable("AiChats");
                 });
 
-            modelBuilder.Entity("Elysium.Shared.Models.AiChatMessage", b =>
+            modelBuilder.Entity("Elysium.Domain.Models.AiChatMessage", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -71,7 +71,7 @@ namespace Elysium.Infrastructure.Migrations
                     b.ToTable("AiChatMessages");
                 });
 
-            modelBuilder.Entity("Elysium.Shared.Models.ConfusionFlag", b =>
+            modelBuilder.Entity("Elysium.Domain.Models.ConfusionFlag", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -92,7 +92,7 @@ namespace Elysium.Infrastructure.Migrations
                     b.ToTable("ConfusionFlags");
                 });
 
-            modelBuilder.Entity("Elysium.Shared.Models.Course", b =>
+            modelBuilder.Entity("Elysium.Domain.Models.Course", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -137,7 +137,7 @@ namespace Elysium.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Elysium.Shared.Models.Enrollment", b =>
+            modelBuilder.Entity("Elysium.Domain.Models.Enrollment", b =>
                 {
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
@@ -157,7 +157,7 @@ namespace Elysium.Infrastructure.Migrations
                     b.ToTable("Enrollments");
                 });
 
-            modelBuilder.Entity("Elysium.Shared.Models.Material", b =>
+            modelBuilder.Entity("Elysium.Domain.Models.Material", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -206,7 +206,7 @@ namespace Elysium.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Elysium.Shared.Models.Session", b =>
+            modelBuilder.Entity("Elysium.Domain.Models.Session", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -254,7 +254,7 @@ namespace Elysium.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Elysium.Shared.Models.Student", b =>
+            modelBuilder.Entity("Elysium.Domain.Models.Student", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -273,7 +273,7 @@ namespace Elysium.Infrastructure.Migrations
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("Elysium.Shared.Models.StudentSession", b =>
+            modelBuilder.Entity("Elysium.Domain.Models.StudentSession", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -300,7 +300,7 @@ namespace Elysium.Infrastructure.Migrations
                     b.ToTable("StudentSessions");
                 });
 
-            modelBuilder.Entity("Elysium.Shared.Models.Teacher", b =>
+            modelBuilder.Entity("Elysium.Domain.Models.Teacher", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -319,7 +319,7 @@ namespace Elysium.Infrastructure.Migrations
                     b.ToTable("Teachers");
                 });
 
-            modelBuilder.Entity("Elysium.Shared.Models.TranscriptSegment", b =>
+            modelBuilder.Entity("Elysium.Domain.Models.TranscriptSegment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -354,7 +354,7 @@ namespace Elysium.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Elysium.Shared.Models.User", b =>
+            modelBuilder.Entity("Elysium.Domain.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -411,9 +411,9 @@ namespace Elysium.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Elysium.Shared.Models.AiChat", b =>
+            modelBuilder.Entity("Elysium.Domain.Models.AiChat", b =>
                 {
-                    b.HasOne("Elysium.Shared.Models.StudentSession", "StudentSession")
+                    b.HasOne("Elysium.Domain.Models.StudentSession", "StudentSession")
                         .WithMany("AiChats")
                         .HasForeignKey("StudentSessionId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -422,9 +422,9 @@ namespace Elysium.Infrastructure.Migrations
                     b.Navigation("StudentSession");
                 });
 
-            modelBuilder.Entity("Elysium.Shared.Models.AiChatMessage", b =>
+            modelBuilder.Entity("Elysium.Domain.Models.AiChatMessage", b =>
                 {
-                    b.HasOne("Elysium.Shared.Models.AiChat", "AiChat")
+                    b.HasOne("Elysium.Domain.Models.AiChat", "AiChat")
                         .WithMany("Messages")
                         .HasForeignKey("AiChatId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -433,9 +433,9 @@ namespace Elysium.Infrastructure.Migrations
                     b.Navigation("AiChat");
                 });
 
-            modelBuilder.Entity("Elysium.Shared.Models.ConfusionFlag", b =>
+            modelBuilder.Entity("Elysium.Domain.Models.ConfusionFlag", b =>
                 {
-                    b.HasOne("Elysium.Shared.Models.StudentSession", "StudentSession")
+                    b.HasOne("Elysium.Domain.Models.StudentSession", "StudentSession")
                         .WithMany("ConfusionFlags")
                         .HasForeignKey("StudentSessionId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -444,9 +444,9 @@ namespace Elysium.Infrastructure.Migrations
                     b.Navigation("StudentSession");
                 });
 
-            modelBuilder.Entity("Elysium.Shared.Models.Course", b =>
+            modelBuilder.Entity("Elysium.Domain.Models.Course", b =>
                 {
-                    b.HasOne("Elysium.Shared.Models.Teacher", "Teacher")
+                    b.HasOne("Elysium.Domain.Models.Teacher", "Teacher")
                         .WithMany("Courses")
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -455,15 +455,15 @@ namespace Elysium.Infrastructure.Migrations
                     b.Navigation("Teacher");
                 });
 
-            modelBuilder.Entity("Elysium.Shared.Models.Enrollment", b =>
+            modelBuilder.Entity("Elysium.Domain.Models.Enrollment", b =>
                 {
-                    b.HasOne("Elysium.Shared.Models.Course", "Course")
+                    b.HasOne("Elysium.Domain.Models.Course", "Course")
                         .WithMany("Enrollments")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Elysium.Shared.Models.Student", "Student")
+                    b.HasOne("Elysium.Domain.Models.Student", "Student")
                         .WithMany("CourseMembers")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -474,9 +474,9 @@ namespace Elysium.Infrastructure.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("Elysium.Shared.Models.Material", b =>
+            modelBuilder.Entity("Elysium.Domain.Models.Material", b =>
                 {
-                    b.HasOne("Elysium.Shared.Models.Session", "Session")
+                    b.HasOne("Elysium.Domain.Models.Session", "Session")
                         .WithMany("Materials")
                         .HasForeignKey("SessionId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -485,41 +485,41 @@ namespace Elysium.Infrastructure.Migrations
                     b.Navigation("Session");
                 });
 
-            modelBuilder.Entity("Elysium.Shared.Models.Session", b =>
+            modelBuilder.Entity("Elysium.Domain.Models.Session", b =>
                 {
-                    b.HasOne("Elysium.Shared.Models.Course", "Course")
+                    b.HasOne("Elysium.Domain.Models.Course", "Course")
                         .WithMany("Sessions")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Elysium.Shared.Models.Student", null)
+                    b.HasOne("Elysium.Domain.Models.Student", null)
                         .WithMany("Sessions")
                         .HasForeignKey("StudentId");
 
                     b.Navigation("Course");
                 });
 
-            modelBuilder.Entity("Elysium.Shared.Models.Student", b =>
+            modelBuilder.Entity("Elysium.Domain.Models.Student", b =>
                 {
-                    b.HasOne("Elysium.Shared.Models.User", "User")
+                    b.HasOne("Elysium.Domain.Models.User", "User")
                         .WithOne("Student")
-                        .HasForeignKey("Elysium.Shared.Models.Student", "UserId")
+                        .HasForeignKey("Elysium.Domain.Models.Student", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Elysium.Shared.Models.StudentSession", b =>
+            modelBuilder.Entity("Elysium.Domain.Models.StudentSession", b =>
                 {
-                    b.HasOne("Elysium.Shared.Models.Session", "Session")
+                    b.HasOne("Elysium.Domain.Models.Session", "Session")
                         .WithMany("StudentSessions")
                         .HasForeignKey("SessionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Elysium.Shared.Models.Student", "Student")
+                    b.HasOne("Elysium.Domain.Models.Student", "Student")
                         .WithMany("StudentSessions")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -530,20 +530,20 @@ namespace Elysium.Infrastructure.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("Elysium.Shared.Models.Teacher", b =>
+            modelBuilder.Entity("Elysium.Domain.Models.Teacher", b =>
                 {
-                    b.HasOne("Elysium.Shared.Models.User", "User")
+                    b.HasOne("Elysium.Domain.Models.User", "User")
                         .WithOne("Teacher")
-                        .HasForeignKey("Elysium.Shared.Models.Teacher", "UserId")
+                        .HasForeignKey("Elysium.Domain.Models.Teacher", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Elysium.Shared.Models.TranscriptSegment", b =>
+            modelBuilder.Entity("Elysium.Domain.Models.TranscriptSegment", b =>
                 {
-                    b.HasOne("Elysium.Shared.Models.Session", "Session")
+                    b.HasOne("Elysium.Domain.Models.Session", "Session")
                         .WithMany("TranscriptSegments")
                         .HasForeignKey("SessionId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -552,19 +552,19 @@ namespace Elysium.Infrastructure.Migrations
                     b.Navigation("Session");
                 });
 
-            modelBuilder.Entity("Elysium.Shared.Models.AiChat", b =>
+            modelBuilder.Entity("Elysium.Domain.Models.AiChat", b =>
                 {
                     b.Navigation("Messages");
                 });
 
-            modelBuilder.Entity("Elysium.Shared.Models.Course", b =>
+            modelBuilder.Entity("Elysium.Domain.Models.Course", b =>
                 {
                     b.Navigation("Enrollments");
 
                     b.Navigation("Sessions");
                 });
 
-            modelBuilder.Entity("Elysium.Shared.Models.Session", b =>
+            modelBuilder.Entity("Elysium.Domain.Models.Session", b =>
                 {
                     b.Navigation("Materials");
 
@@ -573,7 +573,7 @@ namespace Elysium.Infrastructure.Migrations
                     b.Navigation("TranscriptSegments");
                 });
 
-            modelBuilder.Entity("Elysium.Shared.Models.Student", b =>
+            modelBuilder.Entity("Elysium.Domain.Models.Student", b =>
                 {
                     b.Navigation("CourseMembers");
 
@@ -582,19 +582,19 @@ namespace Elysium.Infrastructure.Migrations
                     b.Navigation("StudentSessions");
                 });
 
-            modelBuilder.Entity("Elysium.Shared.Models.StudentSession", b =>
+            modelBuilder.Entity("Elysium.Domain.Models.StudentSession", b =>
                 {
                     b.Navigation("AiChats");
 
                     b.Navigation("ConfusionFlags");
                 });
 
-            modelBuilder.Entity("Elysium.Shared.Models.Teacher", b =>
+            modelBuilder.Entity("Elysium.Domain.Models.Teacher", b =>
                 {
                     b.Navigation("Courses");
                 });
 
-            modelBuilder.Entity("Elysium.Shared.Models.User", b =>
+            modelBuilder.Entity("Elysium.Domain.Models.User", b =>
                 {
                     b.Navigation("Student");
 

@@ -1,4 +1,4 @@
-﻿using Elysium.Shared.Models;
+﻿using Elysium.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Elysium.Infrastructure.Context;
