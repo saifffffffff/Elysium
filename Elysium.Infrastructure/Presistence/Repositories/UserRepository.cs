@@ -1,0 +1,13 @@
+﻿using Elysium.Domain.Interfaces.Repositories;
+using Elysium.Domain.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace Elysium.Infrastructure.Presistence.Repositories;
+
+public class UserRepository(AppDbContext context) : Repository<User>(context), IUserRepository
+{
+    public async Task<User?> GetByUsernameAsync(string username, CancellationToken cancellationToken = default)
+    {
+        return await context.Users.FirstOrDefaultAsync(u => u.Username == username, cancellationToken);
+    }
+}

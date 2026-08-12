@@ -16,10 +16,6 @@ public class User
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
 
-    public Teacher? Teacher { get; private set; }
-    public Student? Student { get; private set; }
-
-
     public User() { }
 
     private User(string username , string passwordHash , string firstName , string lastName , DateOnly birthDate , UserRole role )

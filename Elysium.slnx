@@ -1,5 +1,5 @@
 <Solution>
-  <Project Path="Elysium.Api/Elysium.Api.csproj" />
+  <Project Path="Elysium.Api/Elysium.Api.csproj" Id="028f051a-bc71-478e-aaf4-a63867bbb1ee" />
   <Project Path="Elysium.Application/Elysium.Application.csproj" />
   <Project Path="Elysium.Domain/Elysium.Domain.csproj" />
   <Project Path="Elysium.Infrastructure/Elysium.Infrastructure.csproj" />

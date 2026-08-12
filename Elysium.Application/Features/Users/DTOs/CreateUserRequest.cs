@@ -20,6 +20,7 @@ public class CreateUserRequestValidator : AbstractValidator<CreateUserRequest>
         
         RuleFor(request => request.password)
             .NotEmpty()
+            .MaximumLength(128)
             .WithMessage("Password is required.");
 
         RuleFor(request => request.username)

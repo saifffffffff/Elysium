@@ -8,12 +8,12 @@
 
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="12.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="10.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="10.0.11" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Elysium.Infrastructure\Elysium.Infrastructure.csproj" />
     <ProjectReference Include="..\Elysium.Domain\Elysium.Domain.csproj" />
   </ItemGroup>
+
 
 </Project>

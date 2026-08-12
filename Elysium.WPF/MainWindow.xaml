@@ -5,8 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Elysium.WPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Elysium" Height="450" Width="800" WindowStartupLocation="CenterScreen" Visibility="Hidden">
     <Grid>
-
+        <!-- Reserved main container; the app runs from SignInView (unified auth window) -->
+        <!-- Navigation happens within SignInView + StudentView/TeacherView dashboard windows -->
     </Grid>
 </Window>
+

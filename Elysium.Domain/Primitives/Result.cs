@@ -63,9 +63,12 @@ public class Result<T>
     {
         Value = value;
         IsSuccess = isSuccess;
+        
+        if ( error is not null )
+            Errors.Add(error);
     }
 
-    Result(List<Error?> errors)
+    Result(List<Error> errors)
     {
         Errors = errors!;
         IsSuccess = false;
@@ -77,7 +80,7 @@ public class Result<T>
         return new Result<T>(value , true );
     }
 
-    public static Result<T> Failure(Result result ) => new Result<T>(result.Errors);
+    public static Result<T> Failure(Result result ) => new Result<T>(result.Errors!);
 
     public static Result<T> Failure(string message) => new Result<T>(default, false, new(message));
 
