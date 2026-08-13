@@ -17,11 +17,15 @@ public class CreateUserRequestValidator : AbstractValidator<CreateUserRequest>
 {
     public CreateUserRequestValidator()
     {
-        
+        // TODO : add a password validation in the domain model and the database
         RuleFor(request => request.password)
             .NotEmpty()
-            .MaximumLength(128)
-            .WithMessage("Password is required.");
+            .MinimumLength(8)
+            .Matches("[A-Z]").WithMessage("Password must contain at least one uppercase letter.")
+            .Matches("[a-z]").WithMessage("Password must contain at least one lowercase letter.")
+            .Matches("[0-9]").WithMessage("Password must contain at least one digit.")
+            .Matches(@"[^A-Za-z0-9]").WithMessage("Password must contain at least one special character.")
+            .MaximumLength(128);
 
         RuleFor(request => request.username)
             .NotEmpty()

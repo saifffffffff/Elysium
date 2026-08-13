@@ -1,7 +1,10 @@
+using Elysium.Application.Features.Courses.DTOs;
+using Elysium.Application.Features.Courses.Services;
 using Elysium.Application.Features.Students.Services;
 using Elysium.Application.Features.Teachers.Services;
 using Elysium.Application.Features.Users.DTOs;
 using Elysium.Application.Features.Users.Services;
+using Elysium.Application.Helpers;
 using Elysium.Domain.Interfaces;
 using Elysium.Domain.Interfaces.Repositories;
 using Elysium.Domain.Models;
@@ -49,11 +52,14 @@ builder.Services.AddScoped<IValidator<SignInRequest>, SignInRequestValidator>();
 builder.Services.AddScoped<IValidator<UpdateProfileRequest>, UpdateProfileRequestValidator>();
 builder.Services.AddScoped<IValidator<ChangeUsernameRequest>, ChangeUsernameRequestValidator>();
 builder.Services.AddScoped<IValidator<ChangePasswordRequest>, ChangePasswordRequestValidator>();
+builder.Services.AddScoped<IValidator<CreateCourseRequest>, CreateCourseValidator>();
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<ITeacherService, TeacherService>();
+builder.Services.AddScoped<ICourseService, CourseService>();
 
+builder.Services.AddScoped<ICodeGenerator, CodeGenerator>();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

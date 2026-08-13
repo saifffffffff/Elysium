@@ -68,7 +68,7 @@ public class UserService(IUserRepository userRepository, ITeacherRepository teac
         }
         
         
-        return Result<int>.Success(user.Id);
+        return user.Id;
     
     }
 
@@ -96,7 +96,7 @@ public class UserService(IUserRepository userRepository, ITeacherRepository teac
         if (user is null)
             return Result<User>.Failure("User not found");
 
-        return Result<User>.Success(user);
+        return user;
 
     }
 
@@ -128,7 +128,7 @@ public class UserService(IUserRepository userRepository, ITeacherRepository teac
         if (result == PasswordVerificationResult.Failed)
             return Result<UserDto>.Failure("Incorrect username/password");
 
-        return Result<UserDto>.Success(ToDto(user));
+        return ToDto(user);
 
     }
 

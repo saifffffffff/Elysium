@@ -22,7 +22,8 @@ public class CourseConfiguration : IEntityTypeConfiguration<Course>
 
         builder.Property(x => x.Code)
             .IsRequired()
-            .HasMaxLength(6);
+            .HasMaxLength(6)
+            .HasColumnType("VARCHAR");
 
         builder.HasIndex(x => x.Code).IsUnique();
 
@@ -34,6 +35,7 @@ public class CourseConfiguration : IEntityTypeConfiguration<Course>
         {
             t.HasCheckConstraint("CK_Courses_Name", "LEN(TRIM(Name)) > 0");
             t.HasCheckConstraint("CK_Courses_Code", "LEN(TRIM(Code)) = 6");
+            t.HasCheckConstraint("CK_Courses_Code_Chars", "Code Not LIKE '%[^a-z0-9A-Z]%'");
         });
 
 

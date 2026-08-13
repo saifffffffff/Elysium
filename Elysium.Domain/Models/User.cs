@@ -42,7 +42,7 @@ public class User
         var user = new User(username, passwordHash, firstName, lastName, birthDate, role);
         user.CreatedAt = user.UpdatedAt = DateTime.UtcNow;
 
-        return Result<User>.Success(user);
+        return user;
 
     }
     

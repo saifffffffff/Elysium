@@ -94,6 +94,7 @@ public class Result<T>
         }
     }
 
+    public static implicit operator Result<T>(T value) => Success(value);
 
 
 }
