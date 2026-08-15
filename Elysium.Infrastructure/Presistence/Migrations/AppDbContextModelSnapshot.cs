@@ -239,14 +239,9 @@ namespace Elysium.Infrastructure.Migrations
                         .HasColumnType("tinyint")
                         .HasDefaultValue((byte)0);
 
-                    b.Property<int?>("StudentId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CourseId");
-
-                    b.HasIndex("StudentId");
 
                     b.ToTable("Sessions", null, t =>
                         {
@@ -495,10 +490,6 @@ namespace Elysium.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Elysium.Domain.Models.Student", null)
-                        .WithMany("Sessions")
-                        .HasForeignKey("StudentId");
-
                     b.Navigation("Course");
                 });
 
@@ -578,8 +569,6 @@ namespace Elysium.Infrastructure.Migrations
             modelBuilder.Entity("Elysium.Domain.Models.Student", b =>
                 {
                     b.Navigation("CourseMembers");
-
-                    b.Navigation("Sessions");
 
                     b.Navigation("StudentSessions");
                 });

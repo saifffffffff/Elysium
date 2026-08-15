@@ -1,5 +1,8 @@
 using Elysium.Application.Features.Courses.DTOs;
 using Elysium.Application.Features.Courses.Services;
+using Elysium.Application.Features.Enrollments.Services;
+using Elysium.Application.Features.Sessions.DTOs;
+using Elysium.Application.Features.Sessions.Services;
 using Elysium.Application.Features.Students.Services;
 using Elysium.Application.Features.Teachers.Services;
 using Elysium.Application.Features.Users.DTOs;
@@ -30,6 +33,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 builder.Services.AddOpenApi();
+
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
@@ -52,13 +56,15 @@ builder.Services.AddScoped<IValidator<SignInRequest>, SignInRequestValidator>();
 builder.Services.AddScoped<IValidator<UpdateProfileRequest>, UpdateProfileRequestValidator>();
 builder.Services.AddScoped<IValidator<ChangeUsernameRequest>, ChangeUsernameRequestValidator>();
 builder.Services.AddScoped<IValidator<ChangePasswordRequest>, ChangePasswordRequestValidator>();
-builder.Services.AddScoped<IValidator<CreateCourseRequest>, CreateCourseValidator>();
+builder.Services.AddScoped<IValidator<CreateCourseRequest>, CreateCourseRequestValidator>();
+builder.Services.AddScoped<IValidator<CreateSessionRequest>, CreateSessionRequestValidator>();
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<ITeacherService, TeacherService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
-
+builder.Services.AddScoped<IEnrollmentService, EnrollmentService>();
+builder.Services.AddScoped<ISessionService, SessionService>();
 builder.Services.AddScoped<ICodeGenerator, CodeGenerator>();
 var app = builder.Build();
 

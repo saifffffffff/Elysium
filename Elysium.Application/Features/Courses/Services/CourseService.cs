@@ -1,5 +1,6 @@
 ﻿using Elysium.Application.Features.Courses.DTOs;
 using Elysium.Application.Features.Teachers.Services;
+using Elysium.Application.Features.Users.DTOs;
 using Elysium.Application.Helpers;
 using Elysium.Domain.Interfaces;
 using Elysium.Domain.Interfaces.Repositories;
@@ -12,7 +13,7 @@ using System.Text;
 
 namespace Elysium.Application.Features.Courses.Services;
 
-public class CourseService( ITeacherRepository teacherRepository, IUnitOfWork unitOfWork, ICodeGenerator codeGenerator, IValidator<CreateCourseRequest> courseValidator , ICourseRepository courseRepository) : ICourseService
+public class CourseService( ITeacherRepository teacherRepository, IStudentRepository studentRepository, IEnrollmentRepository enrollmentRepository, IUnitOfWork unitOfWork, ICodeGenerator codeGenerator, IValidator<CreateCourseRequest> courseValidator , ICourseRepository courseRepository) : ICourseService
 {
     public async Task<Result<bool>> ExistsByCodeAsync(string code, CancellationToken cancellationToken = default)
     {
@@ -68,7 +69,36 @@ public class CourseService( ITeacherRepository teacherRepository, IUnitOfWork un
 
     }
 
-    public Task<Result<IReadOnlyList<CourseDto>>> GetAllAsync(CancellationToken cancellationToken = default)
+    
+
+    private CourseDto ToDto(Course course) => new CourseDto(course.Id, course.Name, course.Description, course.Code  ,course.TeacherId, course.CreatedAt);
+
+    public async Task<Result<IReadOnlyList<CourseDto>>> GetAllByTeacherId(int teacherId, CancellationToken cancellationToken = default)
+    {
+        
+        bool exists= await teacherRepository.ExistsAsync(teacher => teacher.Id == teacherId, cancellationToken);
+        
+        if ( !exists )
+            return Result<IReadOnlyList<CourseDto>>.Failure($"Teacher with id {teacherId} does not exist");
+
+        var courses = await courseRepository.FindAsync(course => course.TeacherId == teacherId, cancellationToken);
+
+        return courses.Select(ToDto).ToList();
+    }
+
+    public async Task<Result<IReadOnlyList<CourseDto>>> GetAllByStudentId(int studentId, CancellationToken cancellationToken = default)
+    {
+        bool exists = await studentRepository.ExistsAsync(student => student.Id == studentId, cancellationToken);
+
+        if (!exists)
+            return Result<IReadOnlyList<CourseDto>>.Failure($"Student with id {studentId} does not exist");
+
+        var enrollments = await enrollmentRepository.GetAllByStudentAsync(studentId, cancellationToken);
+
+        return enrollments.Select(enrollment => ToDto(enrollment.Course)).ToList();
+    }
+
+    Task<Result<IReadOnlyList<CourseDto>>> ICourseService.GetAllAsync(CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

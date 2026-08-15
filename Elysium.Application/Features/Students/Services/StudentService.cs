@@ -26,4 +26,6 @@ public class StudentService(IStudentRepository studentRepository) : IStudentServ
 
     private static StudentDto ToDto(Student student) =>
         new(student.Id, student.User.Username, student.User.FirstName, student.User.LastName, student.User.BirthDate);
+
+
 }

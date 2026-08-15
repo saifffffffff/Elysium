@@ -145,6 +145,11 @@
                                    FontSize="12"
                                    Margin="6,-8,0,0"/>
 
+                        <CheckBox x:Name="RememberMeCheckBox"
+                                  Content="Remember me"
+                                  Style="{StaticResource ModernCheckBox}"
+                                  Margin="0,4,0,0"/>
+
                         <TextBlock x:Name="SignInGeneralError"
                                    Foreground="{StaticResource ErrorBrush}"
                                    FontSize="13"

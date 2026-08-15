@@ -43,6 +43,19 @@ public partial class SignInView : Window
         _signUpPresenter.SignUpSuccess += Presenter_SignUpSuccess;
         _signUpPresenter.SignUpFailed += Presenter_SignUpFailed;
         _signUpPresenter.ValidationErrorsChanged += SignUpPresenter_ValidationErrorsChanged;
+
+        RestoreRememberedCredentials();
+    }
+
+    private void RestoreRememberedCredentials()
+    {
+        var saved = CredentialStore.Load();
+        if (saved is not null)
+        {
+            SignInUsernameTextBox.Text = saved.Value.Username;
+            SignInPasswordBox.Password = saved.Value.Password;
+            RememberMeCheckBox.IsChecked = true;
+        }
     }
 
     #region Custom chrome
@@ -153,6 +166,11 @@ public partial class SignInView : Window
 
     private void Presenter_SignInSuccess(object? sender, EventArgs e)
     {
+        if (RememberMeCheckBox.IsChecked == true)
+            CredentialStore.Save(SignInUsernameTextBox.Text, SignInPasswordBox.Password);
+        else
+            CredentialStore.Delete();
+
         var user = _signInPresenter.GetCurrentUser();
         if (user != null)
         {

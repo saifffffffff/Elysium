@@ -9,14 +9,19 @@ public class ChangePasswordRequestValidator : AbstractValidator<ChangePasswordRe
 {
     public ChangePasswordRequestValidator()
     {
+
+
         RuleFor(request => request.currentPassword)
             .NotEmpty()
             .WithMessage("Current password is required");
 
         RuleFor(request => request.newPassword)
             .NotEmpty()
-            .WithMessage("New password is required")
-            .MaximumLength(64)
-            .WithMessage("New password cannot exceed 64 characters.");
+            .MinimumLength(8)
+            .Matches("[A-Z]").WithMessage("Password must contain at least one uppercase letter.")
+            .Matches("[a-z]").WithMessage("Password must contain at least one lowercase letter.")
+            .Matches("[0-9]").WithMessage("Password must contain at least one digit.")
+            .Matches(@"[^A-Za-z0-9]").WithMessage("Password must contain at least one special character.")
+            .MaximumLength(128);
     }
 }

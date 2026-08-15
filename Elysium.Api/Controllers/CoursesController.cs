@@ -17,6 +17,21 @@ public class CoursesController(ICourseService courseService) : ControllerBase
         return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Errors);
     }
 
+    [HttpGet("{teacherId:int}")]
+    public async Task<IActionResult> GetAllByTeacherId (int teacherId , CancellationToken cancellationToken) 
+    {
+        var result = await courseService.GetAllByTeacherId(teacherId);
+
+        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Errors);
+    }
+
+    [HttpGet("student/{studentId:int}")]
+    public async Task<IActionResult> GetAllByStudentId(int studentId, CancellationToken cancellationToken)
+    {
+        var result = await courseService.GetAllByStudentId(studentId);
+
+        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Errors);
+    }
 
 
 }

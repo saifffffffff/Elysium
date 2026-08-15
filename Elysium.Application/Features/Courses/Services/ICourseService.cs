@@ -13,6 +13,7 @@ public interface ICourseService
     Task<Result<CreateCourseResponse>> CreateAsync(CreateCourseRequest request, CancellationToken cancellationToken = default);
     Task<Result<IReadOnlyList<CourseDto>>> GetAllAsync(CancellationToken cancellationToken = default);
     Task<Result<bool>> ExistsByCodeAsync(string code, CancellationToken cancellationToken = default);
-
+    Task<Result<IReadOnlyList<CourseDto>>> GetAllByTeacherId(int teacherId, CancellationToken cancellationToken = default);
+    Task<Result<IReadOnlyList<CourseDto>>> GetAllByStudentId(int studentId, CancellationToken cancellationToken = default);
 
 }

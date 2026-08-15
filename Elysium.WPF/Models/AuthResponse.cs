@@ -4,9 +4,12 @@ namespace Elysium.WPF.Models;
 /// Response model for successful authentication
 /// </summary>
 public record AuthResponse(
+    int Id,
     string Username,
     string FirstName,
     string LastName,
     DateOnly BirthDate,
-    UserRole Role
+    UserRole Role,
+    int? TeacherId,
+    int? StudentId
 );

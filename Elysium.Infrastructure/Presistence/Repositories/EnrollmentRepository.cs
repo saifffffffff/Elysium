@@ -10,4 +10,12 @@ public class EnrollmentRepository(AppDbContext context) : Repository<Enrollment>
     {
         return await context.Enrollments.FirstOrDefaultAsync(e => e.StudentId == studentId && e.CourseId == courseId, cancellationToken);
     }
+
+    public async Task<IReadOnlyList<Enrollment>> GetAllByStudentAsync(int studentId, CancellationToken cancellationToken = default)
+    {
+        return await context.Enrollments
+            .Where(e => e.StudentId == studentId)
+            .Include(e => e.Course)
+            .ToListAsync(cancellationToken);
+    }
 }

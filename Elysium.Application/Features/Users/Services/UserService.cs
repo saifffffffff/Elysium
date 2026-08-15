@@ -89,14 +89,14 @@ public class UserService(IUserRepository userRepository, ITeacherRepository teac
         return Result.Success();
     }
 
-    public async Task<Result<User>> GetByIdAsync(int id , CancellationToken cancellationToken = default)
+    public async Task<Result<UserDto>> GetByIdAsync(int id , CancellationToken cancellationToken = default)
     {
         var user = await userRepository.GetByIdAsync(id, cancellationToken);
         
         if (user is null)
-            return Result<User>.Failure("User not found");
+            return Result<UserDto>.Failure("User not found");
 
-        return user;
+        return ToDto(user);
 
     }
 
@@ -107,28 +107,42 @@ public class UserService(IUserRepository userRepository, ITeacherRepository teac
         return Result<IEnumerable<UserDto>>.Success(dtos);
     }
 
-    private UserDto ToDto(User user) => new UserDto(user.Username, user.FirstName, user.LastName, user.BirthDate, user.Role);
+    private UserDto ToDto(User user) => new UserDto(user.Id, user.Username, user.FirstName, user.LastName, user.BirthDate, user.Role);
     
-    public async Task<Result<UserDto>> SignInAsync(SignInRequest request  , CancellationToken cancellationToken = default)
+    public async Task<Result<SignInResponse>> SignInAsync(SignInRequest request  , CancellationToken cancellationToken = default)
     {
 
         var validationResult = await signInValidator.ValidateAsync(request);
 
         if (!validationResult.IsValid)
-            return Result<UserDto>.Failure(validationResult.Errors.Select(error => new Error(error.ErrorMessage)).ToList());
+            return Result<SignInResponse>.Failure(validationResult.Errors.Select(error => new Error(error.ErrorMessage)).ToList());
 
         var user = await userRepository.GetByUsernameAsync(request.username, cancellationToken);
         
         if ( user is null ) 
-            return Result<UserDto>.Failure("Incorrect username/password");
+            return Result<SignInResponse>.Failure("Incorrect username/password");
 
 
         var result = hasher.VerifyHashedPassword(user, user.PasswordHash, request.password );
 
         if (result == PasswordVerificationResult.Failed)
-            return Result<UserDto>.Failure("Incorrect username/password");
+            return Result<SignInResponse>.Failure("Incorrect username/password");
 
-        return ToDto(user);
+        int? teacherId = null;
+        int? studentId = null;
+
+        if (user.Role == UserRole.Teacher)
+        {
+            var teacher = await teacherRepository.GetByUserIdAsync(user.Id, cancellationToken);
+            teacherId = teacher?.Id;
+        }
+        else if (user.Role == UserRole.Student)
+        {
+            var student = await studentRepository.GetByUserIdAsync(user.Id, cancellationToken);
+            studentId = student?.Id;
+        }
+
+        return new SignInResponse(user.Id, user.Username, user.FirstName, user.LastName, user.BirthDate, user.Role, teacherId, studentId);
 
     }
 

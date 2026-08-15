@@ -5,5 +5,5 @@ using System.Text;
 
 namespace Elysium.Application.Features.Users.DTOs;
 
-public record UserDto(string username, string firstname, string lastname, DateOnly birthDate, UserRole role);
+public record UserDto(int id, string username, string firstname, string lastname, DateOnly birthDate, UserRole role);
 

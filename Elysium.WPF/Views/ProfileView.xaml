@@ -1,0 +1,305 @@
+<UserControl x:Class="Elysium.WPF.Views.ProfileView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+            <!-- Header -->
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,24">
+                <Button x:Name="BackButton"
+                        Style="{StaticResource SecondaryButton}"
+                        Content="Back to Dashboard"/>
+                <TextBlock Text="My Profile"
+                           FontSize="26"
+                           FontWeight="SemiBold"
+                           Foreground="{StaticResource TextPrimaryBrush}"
+                           VerticalAlignment="Center"
+                           Margin="16,0,0,0"/>
+            </StackPanel>
+
+            <!-- Profile overview -->
+            <Border Background="{StaticResource SurfaceBrush}"
+                    BorderBrush="{StaticResource BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="{StaticResource CardRadius}"
+                    Padding="28"
+                    Margin="0,0,0,28">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,22">
+                        <Border Width="64" Height="64" CornerRadius="32"
+                                Background="{StaticResource AccentBrush}">
+                            <TextBlock x:Name="InitialsText"
+                                       Foreground="{StaticResource TextOnAccentBrush}"
+                                       FontSize="22"
+                                       FontWeight="Bold"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
+                        </Border>
+                        <StackPanel VerticalAlignment="Center" Margin="16,0,0,0">
+                            <TextBlock x:Name="UsernameText"
+                                       FontSize="22"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimaryBrush}"/>
+                            <TextBlock x:Name="RoleText" Style="{StaticResource BodyTextBlock}"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel x:Name="OverviewLoadingPanel"
+                                Visibility="Collapsed"
+                                Orientation="Horizontal"
+                                Margin="0,0,0,12">
+                        <ProgressBar Width="120" Height="4" IsIndeterminate="True"/>
+                        <TextBlock Text="Loading profile..."
+                                   Margin="10,0,0,0"
+                                   Style="{StaticResource BodyTextBlock}"/>
+                    </StackPanel>
+                    <TextBlock x:Name="OverviewErrorText"
+                               Foreground="{StaticResource ErrorBrush}"
+                               FontSize="13"
+                               TextWrapping="Wrap"
+                               Margin="0,0,0,10"/>
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Row="0" Grid.Column="0">
+                            <TextBlock Text="First Name" Style="{StaticResource BodyTextBlock}"/>
+                            <TextBlock x:Name="FirstNameDisplay"
+                                       FontSize="16"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimaryBrush}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Row="0" Grid.Column="1">
+                            <TextBlock Text="Last Name" Style="{StaticResource BodyTextBlock}"/>
+                            <TextBlock x:Name="LastNameDisplay"
+                                       FontSize="16"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimaryBrush}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,20,0,0">
+                            <TextBlock Text="Birth Date" Style="{StaticResource BodyTextBlock}"/>
+                            <TextBlock x:Name="BirthDateDisplay"
+                                       FontSize="16"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimaryBrush}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,20,0,0">
+                            <TextBlock Text="Member Since" Style="{StaticResource BodyTextBlock}"/>
+                            <TextBlock x:Name="MemberSinceDisplay"
+                                       FontSize="16"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimaryBrush}"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Update profile -->
+            <Border Background="{StaticResource SurfaceBrush}"
+                    BorderBrush="{StaticResource BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="{StaticResource CardRadius}"
+                    Padding="28"
+                    Margin="0,0,0,28">
+                <StackPanel>
+                    <TextBlock Text="Update Profile"
+                               FontSize="19"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource TextPrimaryBrush}"
+                               Margin="0,0,0,18"/>
+
+                    <TextBlock Text="First Name"
+                               FontSize="12"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource TextPrimaryBrush}"
+                               Margin="0,0,0,6"/>
+                    <Border Style="{StaticResource ModernInputBorder}" Margin="0,0,0,4">
+                        <TextBox x:Name="FirstNameInput" Style="{StaticResource ModernTextBox}"/>
+                    </Border>
+                    <TextBlock x:Name="FirstNameError"
+                               Foreground="{StaticResource ErrorBrush}"
+                               FontSize="12"
+                               Margin="6,-8,0,0"/>
+
+                    <TextBlock Text="Last Name"
+                               FontSize="12"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource TextPrimaryBrush}"
+                               Margin="0,9,0,6"/>
+                    <Border Style="{StaticResource ModernInputBorder}" Margin="0,0,0,4">
+                        <TextBox x:Name="LastNameInput" Style="{StaticResource ModernTextBox}"/>
+                    </Border>
+                    <TextBlock x:Name="LastNameError"
+                               Foreground="{StaticResource ErrorBrush}"
+                               FontSize="12"
+                               Margin="6,-8,0,0"/>
+
+                    <TextBlock Text="Birth Date"
+                               FontSize="12"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource TextPrimaryBrush}"
+                               Margin="0,9,0,6"/>
+                    <Border Style="{StaticResource ModernInputBorder}" Margin="0,0,0,4">
+                        <DatePicker x:Name="UpdateBirthDatePicker"
+                                    Background="Transparent"
+                                    BorderBrush="{x:Static SystemColors.ControlDarkDarkBrush}"
+                                    BorderThickness="0"
+                                    Foreground="{StaticResource TextPrimaryBrush}"
+                                    FontSize="14"
+                                    Padding="0"
+                                    HorizontalAlignment="Stretch"/>
+                    </Border>
+                    <TextBlock x:Name="BirthDateError"
+                               Foreground="{StaticResource ErrorBrush}"
+                               FontSize="12"
+                               Margin="6,-8,0,0"/>
+
+                    <TextBlock x:Name="UpdateGeneralError"
+                               Foreground="{StaticResource ErrorBrush}"
+                               FontSize="13"
+                               TextWrapping="Wrap"
+                               Margin="0,8,0,0"/>
+                    <TextBlock x:Name="UpdateSuccessText"
+                               Foreground="{StaticResource AccentBrush}"
+                               FontSize="13"
+                               TextWrapping="Wrap"
+                               Margin="0,8,0,0"/>
+                    <StackPanel x:Name="UpdateLoadingPanel"
+                                Visibility="Collapsed"
+                                Orientation="Horizontal"
+                                Margin="0,12,0,0">
+                        <ProgressBar Width="96" Height="4" IsIndeterminate="True"/>
+                    </StackPanel>
+                    <Button x:Name="UpdateButton"
+                            Style="{StaticResource SmallButton}"
+                            Content="Save Changes"
+                            Width="160"
+                            Margin="0,14,0,0"
+                            HorizontalAlignment="Left"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Change username -->
+            <Border Background="{StaticResource SurfaceBrush}"
+                    BorderBrush="{StaticResource BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="{StaticResource CardRadius}"
+                    Padding="28"
+                    Margin="0,0,0,28">
+                <StackPanel>
+                    <TextBlock Text="Change Username"
+                               FontSize="19"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource TextPrimaryBrush}"
+                               Margin="0,0,0,18"/>
+
+                    <TextBlock Text="New Username"
+                               FontSize="12"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource TextPrimaryBrush}"
+                               Margin="0,0,0,6"/>
+                    <Border Style="{StaticResource ModernInputBorder}" Margin="0,0,0,4">
+                        <TextBox x:Name="UsernameInput" Style="{StaticResource ModernTextBox}"/>
+                    </Border>
+                    <TextBlock x:Name="UsernameError"
+                               Foreground="{StaticResource ErrorBrush}"
+                               FontSize="12"
+                               Margin="6,-8,0,0"/>
+
+                    <TextBlock x:Name="UsernameGeneralError"
+                               Foreground="{StaticResource ErrorBrush}"
+                               FontSize="13"
+                               TextWrapping="Wrap"
+                               Margin="0,8,0,0"/>
+                    <TextBlock x:Name="UsernameSuccessText"
+                               Foreground="{StaticResource AccentBrush}"
+                               FontSize="13"
+                               TextWrapping="Wrap"
+                               Margin="0,8,0,0"/>
+                    <StackPanel x:Name="UsernameLoadingPanel"
+                                Visibility="Collapsed"
+                                Orientation="Horizontal"
+                                Margin="0,12,0,0">
+                        <ProgressBar Width="96" Height="4" IsIndeterminate="True"/>
+                    </StackPanel>
+                    <Button x:Name="UsernameButton"
+                            Style="{StaticResource SmallButton}"
+                            Content="Change Username"
+                            Width="170"
+                            Margin="0,14,0,0"
+                            HorizontalAlignment="Left"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Change password -->
+            <Border Background="{StaticResource SurfaceBrush}"
+                    BorderBrush="{StaticResource BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="{StaticResource CardRadius}"
+                    Padding="28">
+                <StackPanel>
+                    <TextBlock Text="Change Password"
+                               FontSize="19"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource TextPrimaryBrush}"
+                               Margin="0,0,0,18"/>
+
+                    <TextBlock Text="Current Password"
+                               FontSize="12"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource TextPrimaryBrush}"
+                               Margin="0,0,0,6"/>
+                    <Border Style="{StaticResource ModernInputBorder}" Margin="0,0,0,4">
+                        <PasswordBox x:Name="CurrentPasswordBox" Style="{StaticResource ModernPasswordBox}"/>
+                    </Border>
+                    <TextBlock x:Name="CurrentPasswordError"
+                               Foreground="{StaticResource ErrorBrush}"
+                               FontSize="12"
+                               Margin="6,-8,0,0"/>
+
+                    <TextBlock Text="New Password"
+                               FontSize="12"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource TextPrimaryBrush}"
+                               Margin="0,9,0,6"/>
+                    <Border Style="{StaticResource ModernInputBorder}" Margin="0,0,0,4">
+                        <PasswordBox x:Name="NewPasswordBox" Style="{StaticResource ModernPasswordBox}"/>
+                    </Border>
+                    <TextBlock x:Name="NewPasswordError"
+                               Foreground="{StaticResource ErrorBrush}"
+                               FontSize="12"
+                               Margin="6,-8,0,0"/>
+
+                    <TextBlock x:Name="PasswordGeneralError"
+                               Foreground="{StaticResource ErrorBrush}"
+                               FontSize="13"
+                               TextWrapping="Wrap"
+                               Margin="0,8,0,0"/>
+                    <TextBlock x:Name="PasswordSuccessText"
+                               Foreground="{StaticResource AccentBrush}"
+                               FontSize="13"
+                               TextWrapping="Wrap"
+                               Margin="0,8,0,0"/>
+                    <StackPanel x:Name="PasswordLoadingPanel"
+                                Visibility="Collapsed"
+                                Orientation="Horizontal"
+                                Margin="0,12,0,0">
+                        <ProgressBar Width="96" Height="4" IsIndeterminate="True"/>
+                    </StackPanel>
+                    <Button x:Name="PasswordButton"
+                            Style="{StaticResource SmallButton}"
+                            Content="Change Password"
+                            Width="170"
+                            Margin="0,14,0,0"
+                            HorizontalAlignment="Left"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

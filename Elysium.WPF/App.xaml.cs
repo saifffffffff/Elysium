@@ -16,6 +16,9 @@ public partial class App : Application
 
     private IAuthService? _authService;
     private IValidationService? _validationService;
+    private ICourseService? _courseService;
+    private IEnrollmentService? _enrollmentService;
+    private ISessionService? _sessionService;
 
     static App()
     {
@@ -102,5 +105,17 @@ public partial class App : Application
         // Create validation service
         _validationService = new ValidationService();
         this.Resources["ValidationService"] = _validationService;
+
+        // Create course service
+        _courseService = new CourseService(httpClient);
+        this.Resources["CourseService"] = _courseService;
+
+        // Create enrollment service
+        _enrollmentService = new EnrollmentService(httpClient);
+        this.Resources["EnrollmentService"] = _enrollmentService;
+
+        // Create session service
+        _sessionService = new SessionService(httpClient);
+        this.Resources["SessionService"] = _sessionService;
     }
 }

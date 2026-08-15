@@ -37,7 +37,6 @@ public class SessionConfiguration : IEntityTypeConfiguration<Session>
             {
                 t.HasCheckConstraint("CK_Sessions_Dates", "(FinishedAt > StartedAt)");
                 t.HasCheckConstraint("CK_Sessions_Name" , "(LEN(TRIM(name)) > 0)");
-
             });
 
 

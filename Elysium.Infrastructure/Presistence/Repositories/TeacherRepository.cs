@@ -13,6 +13,13 @@ public class TeacherRepository(AppDbContext context) : Repository<Teacher>(conte
             .FirstOrDefaultAsync(teacher => teacher.Id == id, cancellationToken);
     }
 
+    public async Task<Teacher?> GetByUserIdAsync(int userId, CancellationToken cancellationToken = default)
+    {
+        return await context.Teachers
+            .Include(teacher => teacher.User)
+            .FirstOrDefaultAsync(teacher => teacher.UserId == userId, cancellationToken);
+    }
+
     public async Task<IReadOnlyList<Teacher>> GetAllWithProfileAsync(CancellationToken cancellationToken = default)
     {
         return await context.Teachers

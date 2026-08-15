@@ -55,5 +55,19 @@ public class UsersController(IUserService userService) : ControllerBase
         return result.IsSuccess ? NoContent() : BadRequest(result.Errors);
     }
 
+    [HttpPut("change-username")]
+    public async Task<IActionResult> ChangeUsername([FromBody] ChangeUsernameRequest request, CancellationToken cancellationToken = default)
+    {
+        var result = await userService.ChangeUsernameAsync(request, cancellationToken);
+        return result.IsSuccess ? NoContent() : BadRequest(result.Errors);
+    }
+
+    [HttpPut("change-password")]
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request, CancellationToken cancellationToken = default)
+    {
+        var result = await userService.ChangePasswordAsync(request, cancellationToken);
+        return result.IsSuccess ? NoContent() : BadRequest(result.Errors);
+    }
+
 
 }

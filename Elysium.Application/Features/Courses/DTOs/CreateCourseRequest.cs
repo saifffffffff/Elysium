@@ -7,9 +7,9 @@ namespace Elysium.Application.Features.Courses.DTOs;
 
 public record CreateCourseRequest(string name, string? description , int teacherId);
 
-public class CreateCourseValidator : AbstractValidator<CreateCourseRequest>
+public class CreateCourseRequestValidator : AbstractValidator<CreateCourseRequest>
 {
-    public CreateCourseValidator()
+    public CreateCourseRequestValidator()
     {
         // TODO add messages 
         RuleFor(request => request.name)

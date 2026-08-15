@@ -41,5 +41,5 @@ public class Student
     public ICollection<Course> Courses { get; set; } = new List<Course>();
 
     public ICollection<StudentSession> StudentSessions { get; set; } = new List<StudentSession>();
-    public ICollection<Session> Sessions { get; set; } = new List<Session>();
+    
 }

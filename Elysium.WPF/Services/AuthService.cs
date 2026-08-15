@@ -13,6 +13,7 @@ public class AuthService : IAuthService
     private readonly HttpClient _httpClient;
     private string? _lastError;
     private const string ApiBaseUrl = "http://localhost:5129/api/";
+    private static readonly JsonSerializerOptions JsonOptions = new() { PropertyNameCaseInsensitive = true };
 
     public AuthService(HttpClient httpClient)
     {
@@ -42,7 +43,7 @@ public class AuthService : IAuthService
                 return authResponse;
             }
 
-            _lastError = await ExtractErrorMessage(response);
+            _lastError = await ApiErrorParser.ExtractErrorMessageAsync(response, "Authentication failed");
             return null;
         }
         catch (Exception ex)
@@ -73,7 +74,7 @@ public class AuthService : IAuthService
                 return authResponse;
             }
 
-            _lastError = await ExtractErrorMessage(response);
+            _lastError = await ApiErrorParser.ExtractErrorMessageAsync(response, "Authentication failed");
             return null;
         }
         catch (Exception ex)
@@ -92,71 +93,106 @@ public class AuthService : IAuthService
     }
 
     /// <summary>
-    /// Extract error message from API response
+    /// Get the profile of a user by id
     /// </summary>
-    private async Task<string> ExtractErrorMessage(HttpResponseMessage response)
+    public async Task<UserProfile?> GetProfileAsync(int id)
     {
         try
         {
-            var content = await response.Content.ReadAsStringAsync();
+            _lastError = null;
+            var response = await _httpClient.GetAsync($"users/{id}");
 
-            // Try to parse as JSON error response
-            using (var doc = JsonDocument.Parse(content))
+            if (response.IsSuccessStatusCode)
             {
-                var root = doc.RootElement;
-
-                // API returns a top-level array of error objects
-                if (root.ValueKind == JsonValueKind.Array)
-                {
-                    var errors = new List<string>();
-                    foreach (var error in root.EnumerateArray())
-                    {
-                        if (error.TryGetProperty("message", out var msgElement))
-                        {
-                            errors.Add(msgElement.GetString() ?? "Unknown error");
-                        }
-                        else if (error.ValueKind == JsonValueKind.String)
-                        {
-                            errors.Add(error.GetString() ?? "Unknown error");
-                        }
-                    }
-                    if (errors.Count > 0)
-                        return string.Join("; ", errors);
-                }
-
-                if (root.TryGetProperty("errors", out var errorsElement))
-                {
-                    if (errorsElement.ValueKind == JsonValueKind.Array)
-                    {
-                        var errors = new List<string>();
-                        foreach (var error in errorsElement.EnumerateArray())
-                        {
-                            if (error.TryGetProperty("message", out var msgElement))
-                            {
-                                errors.Add(msgElement.GetString() ?? "Unknown error");
-                            }
-                            else if (error.ValueKind == JsonValueKind.String)
-                            {
-                                errors.Add(error.GetString() ?? "Unknown error");
-                            }
-                        }
-                        if (errors.Count > 0)
-                            return string.Join("; ", errors);
-                    }
-                }
-
-                // Try alternate error format
-                if (root.TryGetProperty("error", out var errorElement))
-                {
-                    return errorElement.GetString() ?? "Authentication failed";
-                }
+                var responseData = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<UserProfile>(responseData, JsonOptions);
             }
 
-            return $"Error: {response.StatusCode}";
+            _lastError = await ApiErrorParser.ExtractErrorMessageAsync(response, "Authentication failed");
+            return null;
         }
-        catch
+        catch (Exception ex)
         {
-            return $"Error: {response.StatusCode}";
+            _lastError = $"Connection error: {ex.Message}";
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Update the profile information of a user
+    /// </summary>
+    public async Task<bool> UpdateProfileAsync(UpdateProfileRequest request)
+    {
+        try
+        {
+            _lastError = null;
+            var json = JsonSerializer.Serialize(request);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PutAsync("users", content);
+
+            if (response.IsSuccessStatusCode)
+                return true;
+
+            _lastError = await ApiErrorParser.ExtractErrorMessageAsync(response, "Authentication failed");
+            return false;
+        }
+        catch (Exception ex)
+        {
+            _lastError = $"Connection error: {ex.Message}";
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Change the username of a user
+    /// </summary>
+    public async Task<bool> ChangeUsernameAsync(ChangeUsernameRequest request)
+    {
+        try
+        {
+            _lastError = null;
+            var json = JsonSerializer.Serialize(request);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PutAsync("users/change-username", content);
+
+            if (response.IsSuccessStatusCode)
+                return true;
+
+            _lastError = await ApiErrorParser.ExtractErrorMessageAsync(response, "Authentication failed");
+            return false;
+        }
+        catch (Exception ex)
+        {
+            _lastError = $"Connection error: {ex.Message}";
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Change the password of a user
+    /// </summary>
+    public async Task<bool> ChangePasswordAsync(ChangePasswordRequest request)
+    {
+        try
+        {
+            _lastError = null;
+            var json = JsonSerializer.Serialize(request);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PutAsync("users/change-password", content);
+
+            if (response.IsSuccessStatusCode)
+                return true;
+
+            _lastError = await ApiErrorParser.ExtractErrorMessageAsync(response, "Authentication failed");
+            return false;
+        }
+        catch (Exception ex)
+        {
+            _lastError = $"Connection error: {ex.Message}";
+            return false;
         }
     }
 }

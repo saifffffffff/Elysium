@@ -6,5 +6,5 @@ namespace Elysium.Domain.Interfaces.Repositories;
 public interface IEnrollmentRepository : IRepository<Enrollment>
 {
     Task<Enrollment?> GetByStudentAndCourseAsync(int studentId, int courseId, CancellationToken cancellationToken = default);
-    
+    Task<IReadOnlyList<Enrollment>> GetAllByStudentAsync(int studentId, CancellationToken cancellationToken = default);
 }

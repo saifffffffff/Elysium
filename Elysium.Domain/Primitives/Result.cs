@@ -96,5 +96,9 @@ public class Result<T>
 
     public static implicit operator Result<T>(T value) => Success(value);
 
+    public static implicit operator Result<T>(string errorMessage) => Failure(errorMessage);
+    
+    public static implicit operator Result<T>(List<Error> errors) => Failure(errors);
+    
 
 }

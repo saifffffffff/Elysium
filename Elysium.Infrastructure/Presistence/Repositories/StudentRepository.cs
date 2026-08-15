@@ -13,6 +13,13 @@ public class StudentRepository(AppDbContext context) : Repository<Student>(conte
             .FirstOrDefaultAsync(student => student.Id == id, cancellationToken);
     }
 
+    public async Task<Student?> GetByUserIdAsync(int userId, CancellationToken cancellationToken = default)
+    {
+        return await context.Students
+            .Include(student => student.User)
+            .FirstOrDefaultAsync(student => student.UserId == userId, cancellationToken);
+    }
+
     public async Task<IReadOnlyList<Student>> GetAllWithProfileAsync(CancellationToken cancellationToken = default)
     {
         return await context.Students
