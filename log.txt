@@ -1,0 +1,38 @@
+2026-08-18 16:28:52.754 [Information] DeepgramWsClientOptions: KeepAlive: False
+2026-08-18 16:28:52.755 [Information] DeepgramWsClientOptions: OnPrem: False
+2026-08-18 16:28:52.755 [Information] DeepgramWsClientOptions: APIVersion: v1
+2026-08-18 16:28:52.755 [Information] DeepgramWsClientOptions: API KEY set from parameter
+2026-08-18 16:28:52.760 [Information] DeepgramWsClientOptions: WS BaseAddress does not contain API version: api.deepgram.com
+2026-08-18 16:28:52.761 [Information] DeepgramWsClientOptions: BaseAddress does not contain protocol: api.deepgram.com/v1
+2026-08-18 16:28:52.761 [Information] DeepgramWsClientOptions: BaseAddress: wss://api.deepgram.com/v1
+2026-08-18 16:28:52.816 [Information] Connect: options:
+{
+  "channels": 1,
+  "encoding": "linear16",
+  "interim_results": false,
+  "language": "en-US",
+  "model": "nova-2",
+  "punctuate": true,
+  "sample_rate": 16000
+}
+2026-08-18 16:28:52.833 [Information] Connect: Using default connect cancellation token
+2026-08-18 16:28:57.177 [Information] Stop: Using default disconnect cancellation token
+2026-08-18 16:28:57.286 [Information] DeepgramWsClientOptions: KeepAlive: False
+2026-08-18 16:28:57.286 [Information] DeepgramWsClientOptions: OnPrem: False
+2026-08-18 16:28:57.286 [Information] DeepgramWsClientOptions: APIVersion: v1
+2026-08-18 16:28:57.286 [Information] DeepgramWsClientOptions: API KEY set from parameter
+2026-08-18 16:28:57.286 [Information] DeepgramWsClientOptions: WS BaseAddress does not contain API version: api.deepgram.com
+2026-08-18 16:28:57.287 [Information] DeepgramWsClientOptions: BaseAddress does not contain protocol: api.deepgram.com/v1
+2026-08-18 16:28:57.287 [Information] DeepgramWsClientOptions: BaseAddress: wss://api.deepgram.com/v1
+2026-08-18 16:28:57.287 [Information] Connect: options:
+{
+  "channels": 1,
+  "encoding": "linear16",
+  "interim_results": false,
+  "language": "en-US",
+  "model": "nova-3",
+  "punctuate": true,
+  "sample_rate": 16000
+}
+2026-08-18 16:28:57.289 [Information] Connect: Using default connect cancellation token
+2026-08-18 16:29:01.550 [Information] Stop: Using default disconnect cancellation token

@@ -1,6 +1,6 @@
 using Elysium.WPF.Models;
 
-namespace Elysium.WPF.Services;
+namespace Elysium.WPF.Services.Abstractions;
 
 /// <summary>
 /// Interface for validation service
@@ -36,4 +36,9 @@ public interface IValidationService
     /// Validate create course request (mirrors backend CreateCourseValidator)
     /// </summary>
     List<ValidationError> ValidateCreateCourse(string name, string? description);
+
+    /// <summary>
+    /// Validate create session request (mirrors backend CreateSessionRequestValidator)
+    /// </summary>
+    List<ValidationError> ValidateCreateSession(string name, string? description);
 }

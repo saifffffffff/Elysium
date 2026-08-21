@@ -1,4 +1,4 @@
-<UserControl x:Class="Elysium.WPF.Views.Teacher.TeacherCoursesView"
+<UserControl x:Class="Elysium.WPF.Views.TeacherCoursesView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ScrollViewer VerticalScrollBarVisibility="Auto">

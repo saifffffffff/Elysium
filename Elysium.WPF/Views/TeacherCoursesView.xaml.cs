@@ -4,7 +4,7 @@ using Elysium.WPF.Models.Courses;
 using Elysium.WPF.Presenters;
 using ValidationError = Elysium.WPF.Models.ValidationError;
 
-namespace Elysium.WPF.Views.Teacher;
+namespace Elysium.WPF.Views;
 
 /// <summary>
 /// Interaction logic for TeacherCoursesView

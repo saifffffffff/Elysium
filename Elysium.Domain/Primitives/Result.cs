@@ -45,7 +45,7 @@ public class Result
         }
     }
 
-    
+    public static implicit operator Result(string errorMessage) => Failure(errorMessage);
 
 
 }

@@ -5,6 +5,7 @@ using System.Windows.Media.Animation;
 using Elysium.WPF.Models;
 using Elysium.WPF.Presenters;
 using Elysium.WPF.Services;
+using Elysium.WPF.Services.Abstractions;
 
 namespace Elysium.WPF.Views;
 

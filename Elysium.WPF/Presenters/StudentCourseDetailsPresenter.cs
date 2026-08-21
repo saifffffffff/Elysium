@@ -1,23 +1,22 @@
-using Elysium.WPF.Models.Courses;
 using Elysium.WPF.Models.Sessions;
 using Elysium.WPF.Services;
+using Elysium.WPF.Services.Abstractions;
 
 namespace Elysium.WPF.Presenters;
 
 /// <summary>
-/// Presenter for the course details view
+/// Presenter for the student course details view
 /// </summary>
-public class CourseDetailsPresenter
+public class StudentCourseDetailsPresenter
 {
     private readonly ISessionService _sessionService;
 
     public event EventHandler<List<SessionDto>>? SessionsLoaded;
     public event EventHandler<string>? SessionsLoadFailed;
-    public event EventHandler<string>? SessionStartRequested;
 
     private bool _isLoadingSessions;
 
-    public CourseDetailsPresenter(ISessionService sessionService)
+    public StudentCourseDetailsPresenter(ISessionService sessionService)
     {
         _sessionService = sessionService;
     }
@@ -47,13 +46,5 @@ public class CourseDetailsPresenter
         {
             _isLoadingSessions = false;
         }
-    }
-
-    /// <summary>
-    /// Raise a request to start a session for the given course
-    /// </summary>
-    public void HandleStartSessionRequested(CourseDto course)
-    {
-        SessionStartRequested?.Invoke(this, $"[Dummy Action] Session creation UI ready for course: {course.Name}");
     }
 }

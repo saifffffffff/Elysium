@@ -2,6 +2,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using Elysium.WPF.Models.Courses;
+using Elysium.WPF.Services.Abstractions;
 
 namespace Elysium.WPF.Services;
 

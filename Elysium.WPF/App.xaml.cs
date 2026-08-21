@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Windows;
 using System.Windows.Threading;
 using Elysium.WPF.Services;
+using Elysium.WPF.Services.Abstractions;
 using Elysium.WPF.Views;
 
 namespace Elysium.WPF;
@@ -117,5 +118,11 @@ public partial class App : Application
         // Create session service
         _sessionService = new SessionService(httpClient);
         this.Resources["SessionService"] = _sessionService;
+
+        // Create session hub service
+        this.Resources["SessionHubService"] = new SessionHubService();
+
+        // Create microphone service
+        this.Resources["MicrophoneService"] = new MicrophoneService();
     }
 }

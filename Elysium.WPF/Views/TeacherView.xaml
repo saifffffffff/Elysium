@@ -3,15 +3,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:Elysium.WPF"
         xmlns:views="clr-namespace:Elysium.WPF.Views"
-        xmlns:teacher="clr-namespace:Elysium.WPF.Views.Teacher"
         WindowStartupLocation="CenterScreen"
         Background="{StaticResource BackgroundBrush}"
         WindowState="Maximized"
+        WindowStyle="None"
+        ResizeMode="NoResize"
         Title="Teacher Dashboard - Elysium"
         FontFamily="Segoe UI">
     <Grid Background="{StaticResource BackgroundBrush}">
         <!-- Header -->
-        <Border Height="70" VerticalAlignment="Top">
+        <Border Height="100" VerticalAlignment="Top"
+                MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
             <Border.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
                     <GradientStop Color="#2563EB"/>
@@ -19,41 +21,94 @@
                 </LinearGradientBrush>
             </Border.Background>
             <Grid>
-                <TextBlock Text="Elysium - Teacher Dashboard"
-                           FontSize="22"
-                           FontWeight="SemiBold"
-                           Foreground="{StaticResource TextOnAccentBrush}"
-                           VerticalAlignment="Center"
-                           Margin="30,0,0,0"/>
-                <StackPanel Orientation="Horizontal"
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="44"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Window chrome row -->
+                <StackPanel Grid.Row="0"
+                            Orientation="Horizontal"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Center"
-                            Margin="0,0,30,0">
-                    <Button x:Name="ProfileButton"
+                            Margin="0,0,8,0">
+                    <Button x:Name="MinimizeButton"
                             Style="{StaticResource TitleBarButton}"
-                            ToolTip="Profile"
-                            Margin="0,0,12,0"
-                            Click="ProfileButton_Click">
-                        <Path Data="M12,12c2.21,0 4,-1.79 4,-4s-1.79,-4 -4,-4 -4,1.79 -4,4 1.79,4 4,4zM12,14c-2.67,0 -8,1.34 -8,4v2h16v-2c0,-2.66 -5.33,-4 -8,-4z"
-                              Fill="{StaticResource TextOnAccentBrush}"/>
-                    </Button>
-                    <TextBlock x:Name="UserNameTextBlock"
-                               Foreground="{StaticResource TextOnAccentBrush}"
-                               FontSize="14"
-                               VerticalAlignment="Center"
-                               Margin="0,0,20,0"/>
+                            Content="&#x2014;"
+                            ToolTip="Minimize"
+                            Click="MinimizeButton_Click"/>
+                    <Button x:Name="MaximizeButton"
+                            Style="{StaticResource TitleBarButton}"
+                            Content="&#x2750;"
+                            ToolTip="Maximize"
+                            Click="MaximizeButton_Click"/>
+                    <Button x:Name="CloseButton"
+                            Style="{StaticResource CloseTitleBarButton}"
+                            Content="&#x2715;"
+                            ToolTip="Close"
+                            Click="CloseButton_Click"/>
+                </StackPanel>
+
+                <!-- Main header row -->
+                <Grid Grid.Row="1" Margin="30,0,30,0">
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center">
+                        <Button x:Name="ProfileButton"
+                                ToolTip="Profile"
+                                Width="40"
+                                Height="40"
+                                Padding="0"
+                                BorderThickness="0"
+                                Background="Transparent"
+                                Cursor="Hand"
+                                Click="ProfileButton_Click">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border x:Name="Bd"
+                                            Width="36"
+                                            Height="36"
+                                            CornerRadius="18"
+                                            Background="#FFFFFF">
+                                        <ContentPresenter HorizontalAlignment="Center"
+                                                          VerticalAlignment="Center"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="Bd" Property="Background" Value="#E2E8F0"/>
+                                        </Trigger>
+                                        <Trigger Property="IsPressed" Value="True">
+                                            <Setter TargetName="Bd" Property="Opacity" Value="0.7"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                            <Viewbox Width="20" Height="20">
+                                <Path Data="M12,12c2.21,0 4,-1.79 4,-4s-1.79,-4 -4,-4 -4,1.79 -4,4 1.79,4 4,4zM12,14c-2.67,0 -8,1.34 -8,4v2h16v-2c0,-2.66 -5.33,-4 -8,-4z"
+                                      Fill="{StaticResource AccentBrush}" Stretch="Fill" Width="16"/>
+                            </Viewbox>
+                        </Button>
+                        <TextBlock x:Name="UserNameTextBlock"
+                                   Foreground="{StaticResource TextOnAccentBrush}"
+                                   FontSize="15"
+                                   FontWeight="SemiBold"
+                                   VerticalAlignment="Center"
+                                   Margin="12,0,0,0"/>
+                    </StackPanel>
                     <Button x:Name="LogoutButton"
                             Style="{StaticResource SecondaryButton}"
                             Content="Sign Out"
-                            MinWidth="100"/>
-                </StackPanel>
+                            MinWidth="100"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"/>
+                </Grid>
             </Grid>
         </Border>
 
         <!-- Content -->
         <ScrollViewer x:Name="DashboardContent"
                       VerticalScrollBarVisibility="Auto"
-                      Margin="30,78,30,0">
+                      Margin="30,108,30,0">
             <StackPanel>
                 <!-- Welcome banner -->
                 <Border Background="{StaticResource SurfaceAltBrush}"
@@ -111,6 +166,11 @@
                         <ItemsControl x:Name="CoursesList"
                                       Visibility="Collapsed"
                                       Margin="0,0,0,14">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Columns="2"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Border Background="{StaticResource BackgroundBrush}"
@@ -118,7 +178,7 @@
                                             BorderThickness="1"
                                             CornerRadius="10"
                                             Padding="18,14"
-                                            Margin="0,0,0,10"
+                                            Margin="0,0,12,12"
                                             Cursor="Hand"
                                             MouseLeftButtonDown="OnCourseCardClicked">
                                         <Grid>
@@ -291,16 +351,83 @@
         <!-- Profile panel -->
         <views:ProfileView x:Name="ProfilePanel"
                            Visibility="Collapsed"
-                           Margin="30,78,30,0"/>
+                           Margin="30,108,30,0"/>
 
         <!-- Courses panel -->
-        <teacher:TeacherCoursesView x:Name="CoursePanel"
+        <views:TeacherCoursesView x:Name="CoursePanel"
                                     Visibility="Collapsed"
-                                    Margin="30,78,30,0"/>
+                                    Margin="30,108,30,0"/>
 
         <!-- Course details panel -->
         <views:TeacherCourseDetailsView x:Name="CourseDetailsPanel"
                                         Visibility="Collapsed"
-                                        Margin="30,78,30,0"/>
+                                        Margin="30,108,30,0"/>
+
+        <!-- Session panel -->
+        <views:TeacherSessionView x:Name="SessionPanel"
+                                  Visibility="Collapsed"
+                                  Margin="0,108,0,0"/>
+
+        <!-- Leave confirmation overlay -->
+        <Grid x:Name="LeaveConfirmOverlay"
+              Margin="0,-100,0,0"
+              Background="#660F172A"
+              Visibility="Collapsed">
+            <Border Width="440"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Background="{StaticResource SurfaceBrush}"
+                    BorderBrush="{StaticResource BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="{StaticResource CardRadius}"
+                    Padding="28"
+                    Effect="{StaticResource CardShadow}">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                        <Border Width="44"
+                                Height="44"
+                                CornerRadius="22"
+                                Background="#FEE2E2"
+                                VerticalAlignment="Center">
+                            <TextBlock Text="!"
+                                       FontSize="22"
+                                       FontWeight="Bold"
+                                       Foreground="{StaticResource DangerBrush}"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
+                        </Border>
+                        <StackPanel Margin="16,0,0,0"
+                                    VerticalAlignment="Center">
+                            <TextBlock Text="End Session"
+                                       FontSize="17"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimaryBrush}"/>
+                            <TextBlock Text="Are you sure you want to end this session?"
+                                       FontSize="13"
+                                       Foreground="{StaticResource TextSecondaryBrush}"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <TextBlock x:Name="LeaveConfirmMessage"
+                               FontSize="13"
+                               Foreground="{StaticResource TextSecondaryBrush}"
+                               TextWrapping="Wrap"
+                               Margin="0,0,0,24"/>
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Right">
+                        <Button x:Name="CancelLeaveButton"
+                                Style="{StaticResource SecondaryButton}"
+                                Content="Cancel"
+                                MinWidth="110"
+                                Margin="0,0,12,0"
+                                Click="CancelLeaveButton_Click"/>
+                        <Button x:Name="ConfirmLeaveButton"
+                                Style="{StaticResource DangerButton}"
+                                Content="Yes, End Session"
+                                MinWidth="150"
+                                Click="ConfirmLeaveButton_Click"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Grid>
     </Grid>
 </Window>

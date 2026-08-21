@@ -11,7 +11,7 @@ using System.Text;
 
 namespace Elysium.Application.Features.Sessions.Services;
 
-public class SessionService( ISessionRepository sessionRepository, ICourseRepository courseRepository, IUnitOfWork unitOfWork ,  IValidator<CreateSessionRequest> createSessionValidator) : ISessionService
+public class SessionService( ISessionRepository sessionRepository, ICourseRepository courseRepository, IUnitOfWork unitOfWork , ISessionNotifier sessionNotifier,  IValidator<CreateSessionRequest> createSessionValidator) : ISessionService
 {
     private SessionDto ToDto(Session session) => new SessionDto(session.Id, session.Name, session.Description, session.Status, session.StartedAt, session.FinishedAt);
     
@@ -42,6 +42,7 @@ public class SessionService( ISessionRepository sessionRepository, ICourseReposi
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
+        await sessionNotifier.NotifySessionCreatedAsync( session.CourseId , ToDto(session),cancellationToken);
 
         return session.Id;
 
@@ -63,6 +64,25 @@ public class SessionService( ISessionRepository sessionRepository, ICourseReposi
 
     }
 
+    public async Task<Result> EndAsync(int sessionId, CancellationToken cancellationToken = default)
+    {
+        var session = await sessionRepository.GetByIdAsync(sessionId,  cancellationToken);
 
+        if (session is null)
+            return $"Session with id {sessionId} does not exist";
 
+        if (session.IsFinished)
+            return $"Session with id {sessionId} already finished";
+
+        session.Finish();
+
+        sessionRepository.Update(session);
+        
+        await unitOfWork.SaveChangesAsync(cancellationToken);
+
+        await sessionNotifier.NotifySessionEndedAsync(session.CourseId, sessionId, cancellationToken);
+
+        return Result.Success();
+
+    }
 }

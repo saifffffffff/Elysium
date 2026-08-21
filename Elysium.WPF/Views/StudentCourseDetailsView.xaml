@@ -91,10 +91,39 @@
                                             <ColumnDefinition Width="Auto"/>
                                         </Grid.ColumnDefinitions>
                                         <StackPanel Grid.Column="0">
+                                            <StackPanel Orientation="Horizontal"
+                                                        Margin="0,0,0,4">
+                                                <ContentControl Style="{StaticResource LiveIndicator}"/>
+                                                <TextBlock Text="Live"
+                                                           FontSize="13"
+                                                           FontWeight="SemiBold"
+                                                           Foreground="{StaticResource LiveIndicatorBrush}"
+                                                           VerticalAlignment="Center"
+                                                           Margin="8,0,0,0"/>
+                                            </StackPanel>
                                             <TextBlock Text="{Binding Name}"
                                                        FontSize="16"
                                                        FontWeight="SemiBold"
                                                        Foreground="{StaticResource TextPrimaryBrush}"/>
+                                            <TextBlock Text="{Binding Description}"
+                                                       FontSize="13"
+                                                       Foreground="{StaticResource TextSecondaryBrush}"
+                                                       TextWrapping="Wrap"
+                                                       Margin="0,4,0,0">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Description}" Value="{x:Null}">
+                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Description}" Value="">
+                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
                                             <TextBlock Text="{Binding StartedAt, StringFormat=Started : {0:dd MMM yyyy HH:mm}}"
                                                        FontSize="12"
                                                        Foreground="{StaticResource TextSecondaryBrush}"
@@ -104,7 +133,8 @@
                                                 Content="Join Live"
                                                 Style="{StaticResource SmallButton}"
                                                 VerticalAlignment="Center"
-                                                MinWidth="110"/>
+                                                MinWidth="110"
+                                                Click="JoinSessionButton_Click"/>
                                     </Grid>
                                 </Border>
                             </DataTemplate>
@@ -157,6 +187,25 @@
                                                    FontSize="16"
                                                    FontWeight="SemiBold"
                                                    Foreground="{StaticResource TextPrimaryBrush}"/>
+                                        <TextBlock Text="{Binding Description}"
+                                                   FontSize="13"
+                                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                                   TextWrapping="Wrap"
+                                                   Margin="0,4,0,0">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Description}" Value="{x:Null}">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Description}" Value="">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
                                         <TextBlock Text="{Binding StartedAt, StringFormat=Held on : {0:dd MMM yyyy HH:mm}}"
                                                    FontSize="12"
                                                    Foreground="{StaticResource TextSecondaryBrush}"

@@ -29,6 +29,76 @@
                         Click="StartSessionButton_Click"/>
             </Grid>
 
+            <!-- Create session form -->
+            <Border x:Name="CreateSessionPanel"
+                    Background="{StaticResource SurfaceBrush}"
+                    BorderBrush="{StaticResource BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="{StaticResource CardRadius}"
+                    Padding="28"
+                    Margin="0,0,0,28"
+                    Visibility="Collapsed">
+                <StackPanel>
+                    <TextBlock Text="Session Name"
+                               FontSize="12"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource TextPrimaryBrush}"
+                               Margin="0,0,0,6"/>
+                    <Border Style="{StaticResource ModernInputBorder}" Margin="0,0,0,4">
+                        <TextBox x:Name="SessionNameInput" Style="{StaticResource ModernTextBox}" MaxLength="128"/>
+                    </Border>
+                    <TextBlock x:Name="SessionNameError"
+                               Foreground="{StaticResource ErrorBrush}"
+                               FontSize="12"
+                               Margin="6,-8,0,0"/>
+
+                    <TextBlock Text="Description (optional)"
+                               FontSize="12"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource TextPrimaryBrush}"
+                               Margin="0,9,0,6"/>
+                    <Border Style="{StaticResource ModernInputBorder}" Margin="0,0,0,4">
+                        <TextBox x:Name="SessionDescriptionInput"
+                                 Style="{StaticResource ModernTextBox}"
+                                 Height="110"
+                                 MaxLength="512"
+                                 TextWrapping="Wrap"
+                                 AcceptsReturn="True"
+                                 VerticalContentAlignment="Top"
+                                 ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+                    </Border>
+                    <TextBlock x:Name="SessionDescriptionError"
+                               Foreground="{StaticResource ErrorBrush}"
+                               FontSize="12"
+                               Margin="6,-8,0,0"/>
+
+                    <TextBlock x:Name="SessionGeneralError"
+                               Foreground="{StaticResource ErrorBrush}"
+                               FontSize="13"
+                               TextWrapping="Wrap"
+                               Margin="0,8,0,0"/>
+                    <TextBlock x:Name="SessionSuccessText"
+                               Text="Session created successfully!"
+                               Foreground="{StaticResource AccentBrush}"
+                               FontSize="13"
+                               TextWrapping="Wrap"
+                               Margin="0,8,0,0"
+                               Visibility="Collapsed"/>
+                    <StackPanel x:Name="SessionCreateLoadingPanel"
+                                Visibility="Collapsed"
+                                Orientation="Horizontal"
+                                Margin="0,12,0,0">
+                        <ProgressBar Width="96" Height="4" IsIndeterminate="True"/>
+                    </StackPanel>
+                    <Button x:Name="CreateSessionButton"
+                            Style="{StaticResource SmallButton}"
+                            Content="Create Session"
+                            Width="160"
+                            Margin="0,14,0,0"
+                            HorizontalAlignment="Left"/>
+                </StackPanel>
+            </Border>
+
             <!-- Course info card -->
             <Border Background="{StaticResource SurfaceBrush}"
                     BorderBrush="{StaticResource BorderBrush}"
@@ -103,28 +173,45 @@
                                         CornerRadius="10"
                                         Padding="18,14"
                                         Margin="0,0,0,10">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <StackPanel Grid.Column="0">
-                                            <TextBlock Text="{Binding Name}"
-                                                       FontSize="16"
+                                    <StackPanel>
+                                        <StackPanel Orientation="Horizontal"
+                                                    Margin="0,0,0,4">
+                                            <ContentControl Style="{StaticResource LiveIndicator}"/>
+                                            <TextBlock Text="Live"
+                                                       FontSize="13"
                                                        FontWeight="SemiBold"
-                                                       Foreground="{StaticResource TextPrimaryBrush}"/>
-                                            <TextBlock Text="{Binding StartedAt, StringFormat=Started : {0:dd MMM yyyy HH:mm}}"
-                                                       FontSize="12"
-                                                       Foreground="{StaticResource TextSecondaryBrush}"
-                                                       Margin="0,4,0,0"/>
+                                                       Foreground="{StaticResource LiveIndicatorBrush}"
+                                                       VerticalAlignment="Center"
+                                                       Margin="8,0,0,0"/>
                                         </StackPanel>
-                                        <TextBlock Grid.Column="1"
-                                                   Text="Live"
-                                                   FontSize="12"
+                                        <TextBlock Text="{Binding Name}"
+                                                   FontSize="16"
                                                    FontWeight="SemiBold"
-                                                   Foreground="{StaticResource AccentBrush}"
-                                                   VerticalAlignment="Center"/>
-                                    </Grid>
+                                                   Foreground="{StaticResource TextPrimaryBrush}"/>
+                                        <TextBlock Text="{Binding Description}"
+                                                   FontSize="13"
+                                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                                   TextWrapping="Wrap"
+                                                   Margin="0,4,0,0">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Description}" Value="{x:Null}">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Description}" Value="">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                        <TextBlock Text="{Binding StartedAt, StringFormat=Started : {0:dd MMM yyyy HH:mm}}"
+                                                   FontSize="12"
+                                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                                   Margin="0,4,0,0"/>
+                                    </StackPanel>
                                 </Border>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
@@ -176,6 +263,25 @@
                                                    FontSize="16"
                                                    FontWeight="SemiBold"
                                                    Foreground="{StaticResource TextPrimaryBrush}"/>
+                                        <TextBlock Text="{Binding Description}"
+                                                   FontSize="13"
+                                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                                   TextWrapping="Wrap"
+                                                   Margin="0,4,0,0">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Description}" Value="{x:Null}">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Description}" Value="">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
                                         <TextBlock Text="{Binding StartedAt, StringFormat=Held on : {0:dd MMM yyyy HH:mm}}"
                                                    FontSize="12"
                                                    Foreground="{StaticResource TextSecondaryBrush}"

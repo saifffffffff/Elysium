@@ -1,4 +1,5 @@
 using Elysium.WPF.Models;
+using Elysium.WPF.Services.Abstractions;
 
 namespace Elysium.WPF.Services;
 
@@ -173,6 +174,30 @@ public class ValidationService : IValidationService
         else if (name.Length > 128)
         {
             errors.Add(new ValidationError("Name", "Course name cannot exceed 128 characters."));
+        }
+
+        if (description is not null && description.Length > 512)
+        {
+            errors.Add(new ValidationError("Description", "Description cannot exceed 512 characters."));
+        }
+
+        return errors;
+    }
+
+    /// <summary>
+    /// Validate create session request (mirrors backend CreateSessionRequestValidator)
+    /// </summary>
+    public List<ValidationError> ValidateCreateSession(string name, string? description)
+    {
+        var errors = new List<ValidationError>();
+
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            errors.Add(new ValidationError("Name", "Name is required."));
+        }
+        else if (name.Length > 128)
+        {
+            errors.Add(new ValidationError("Name", "Name cannot exceed 128 characters."));
         }
 
         if (description is not null && description.Length > 512)

@@ -8,12 +8,6 @@
                 <Button x:Name="BackButton"
                         Style="{StaticResource SecondaryButton}"
                         Content="Back to Dashboard"/>
-                <TextBlock Text="My Profile"
-                           FontSize="26"
-                           FontWeight="SemiBold"
-                           Foreground="{StaticResource TextPrimaryBrush}"
-                           VerticalAlignment="Center"
-                           Margin="16,0,0,0"/>
             </StackPanel>
 
             <!-- Profile overview -->

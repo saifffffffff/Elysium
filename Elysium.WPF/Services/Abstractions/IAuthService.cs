@@ -1,4 +1,4 @@
-namespace Elysium.WPF.Services;
+namespace Elysium.WPF.Services.Abstractions;
 
 /// <summary>
 /// Interface for authentication service

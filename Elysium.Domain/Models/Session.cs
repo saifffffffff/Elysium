@@ -49,6 +49,7 @@ public class Session
         Status = SessionStatus.Live;
     }
 
+    public bool IsFinished => Status == SessionStatus.Finished;
     public void Finish()
     {
         FinishedAt = DateTime.UtcNow;

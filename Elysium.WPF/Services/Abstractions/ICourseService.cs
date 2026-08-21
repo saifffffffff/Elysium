@@ -1,6 +1,6 @@
 using Elysium.WPF.Models.Courses;
 
-namespace Elysium.WPF.Services;
+namespace Elysium.WPF.Services.Abstractions;
 
 /// <summary>
 /// Interface for course service
