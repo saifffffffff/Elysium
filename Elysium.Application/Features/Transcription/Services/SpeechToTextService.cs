@@ -1,6 +1,5 @@
 ﻿using Elysium.Application.Features.Sessions.Services;
 using Elysium.Application.Features.Transcription.Interfaces;
-using Elysium.Application.Features.Transcription.Options;
 using Elysium.Domain.Interfaces;
 using Elysium.Domain.Interfaces.Repositories;
 using Elysium.Domain.Models;
@@ -13,8 +12,7 @@ public sealed class SpeechToTextService(
         ITranscriptSegmentRepository transcriptSegmentRepository,
         IUnitOfWork unitOfWork,
         ISessionNotifier sessionNotifier,
-        ITranscriptionProvider transcriptionProvider,
-        IOptions<TranscriptionStreamOptions> streamOptions) : ISpeechToTextService
+        ITranscriptionProvider transcriptionProvider) : ISpeechToTextService
     {
     
     
@@ -29,7 +27,7 @@ public sealed class SpeechToTextService(
 
             Console.WriteLine($"[STT] Starting transcription for sessionId={sessionId}");
 
-            await foreach (var segment in transcriptionProvider.StreamAsync(audioChunks, streamOptions.Value, cancelationToken))
+            await foreach (var segment in transcriptionProvider.StreamAsync(audioChunks,  cancelationToken))
             {
                 if (string.IsNullOrWhiteSpace(segment.Text))
                     continue;
@@ -45,7 +43,7 @@ public sealed class SpeechToTextService(
 
                 await unitOfWork.SaveChangesAsync(cancelationToken);
 
-                // 3. Broadcast to the session group.
+                
                 await sessionNotifier.NotifyTranscriptAppendedAsync(sessionId, segment, cancelationToken);
             }
 

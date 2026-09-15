@@ -4,7 +4,6 @@ using Deepgram.Models.Authenticate.v1;
 using Deepgram.Models.Listen.v2.WebSocket;
 using Elysium.Application.Features.Transcription.DTOs;
 using Elysium.Application.Features.Transcription.Interfaces;
-using Elysium.Application.Features.Transcription.Options;
 using Elysium.Infrastructure.Options;
 using Microsoft.Extensions.Options;
 using System.Runtime.CompilerServices;
@@ -15,12 +14,12 @@ namespace Elysium.Infrastructure.Services;
 
 public sealed class DeepgramTranscriptionProvider : ITranscriptionProvider
 {
-    private readonly DeepgramOptions _options;
+    private readonly SttOptions _options;
 
     private static readonly object InitLock = new();
     private static bool _initialized;
 
-    public DeepgramTranscriptionProvider( IOptions<DeepgramOptions> options)
+    public DeepgramTranscriptionProvider( IOptions<SttOptions> options)
     {
         _options = options.Value;
     }
@@ -37,7 +36,7 @@ public sealed class DeepgramTranscriptionProvider : ITranscriptionProvider
         }
     }
 
-    public async IAsyncEnumerable<TranscriptionSegmentDto> StreamAsync(IAsyncEnumerable<ReadOnlyMemory<byte>> audioChunks, TranscriptionStreamOptions options, [EnumeratorCancellation] CancellationToken ct)
+    public async IAsyncEnumerable<TranscriptionSegmentDto> StreamAsync(IAsyncEnumerable<ReadOnlyMemory<byte>> audioChunks,  [EnumeratorCancellation] CancellationToken ct)
     {
         EnsureInitialized();
 
@@ -48,7 +47,7 @@ public sealed class DeepgramTranscriptionProvider : ITranscriptionProvider
                             SingleWriter = true
                         });
 
-        var liveClient = ClientFactory.CreateListenWebSocketClient(_options.ApiKey);//, new DeepgramWsClientOptions { KeepAlive = true });
+        var liveClient = ClientFactory.CreateListenWebSocketClient(_options.Deepgram.ApiKey , new DeepgramWsClientOptions { KeepAlive = true });
 
 
         await liveClient.Subscribe(
@@ -76,14 +75,14 @@ public sealed class DeepgramTranscriptionProvider : ITranscriptionProvider
         var connected = await liveClient.Connect(
             new LiveSchema
             {
-                Model = options.Model,
-                Language = options.Language,
+                Model = _options.Deepgram.Model,
+                Language = _options.Defaults.Language,
 
                 Encoding = "linear16",
-                SampleRate = options.SampleRate,
+                SampleRate = _options.Defaults.SampleRate,
                 Channels = 1,
 
-                EndPointing = options.EndpointingMs.ToString(),
+                EndPointing = _options.Defaults.EndpointingMs.ToString(),
                 Punctuate = true,
 
                 InterimResults = false
