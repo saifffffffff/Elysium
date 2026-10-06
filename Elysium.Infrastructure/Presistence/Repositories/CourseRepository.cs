@@ -18,4 +18,9 @@ public class CourseRepository(AppDbContext context) : Repository<Course>(context
             .Include(c => c.Sessions)
             .FirstOrDefaultAsync(c => c.Id == Id, cancellationToken);
     }
+
+    public async Task<bool> IsTeacherAssignedToCourse(int teacherId, int courseId, CancellationToken cancellationToken = default)
+    {
+        return await context.Courses.AnyAsync(c => c.Id == courseId && c.TeacherId == teacherId , cancellationToken);
+    }
 }

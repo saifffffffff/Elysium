@@ -5,6 +5,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using Elysium.WPF.Models;
 using Elysium.WPF.Models.Courses;
+using Elysium.WPF.Helpers;
 using Elysium.WPF.Models.Sessions;
 using Elysium.WPF.Presenters;
 using Elysium.WPF.Services;
@@ -44,6 +45,12 @@ public partial class StudentView : Window
         _coursesPresenter.EnrollmentFailed += Presenter_EnrollmentFailed;
 
         LoadCourses();
+    }
+
+    protected override void OnSourceInitialized(EventArgs e)
+    {
+        base.OnSourceInitialized(e);
+        WindowAppearance.ApplySmallCornerRadius(this);
     }
 
     private ISessionHubService SessionHubService =>
@@ -102,33 +109,61 @@ public partial class StudentView : Window
 
     private async void OnSessionJoinRequested(object? sender, SessionDto session)
     {
-        if (_activeSessionId is int currentId && currentId != session.Id)
+        var currentUser = (AuthResponse)Application.Current.Resources["CurrentUser"]!;
+        if (currentUser.StudentId is not int studentId)
+        {
+            MessageBox.Show(
+                "Student profile not found. Please contact support.",
+                "Elysium",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+            return;
+        }
+
+        if (_activeSessionId is int currentSessionId && currentSessionId != session.Id)
         {
             try
             {
-                await SessionHubService.LeaveSessionAsync(currentId);
+                await SessionHubService.LeaveSessionAsync(
+                    new LeaveSessionRequest(studentId, currentSessionId));
+
+                _activeSessionId = null;
             }
-            catch
+            catch (Exception ex)
             {
+                MessageBox.Show(
+                    $"Failed to leave the current session.\n\n{ex.Message}",
+                    "Elysium",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+                return;
             }
         }
 
+        JoinSessionResponse joinResponse;
+        try
+        {
+            joinResponse = await SessionHubService.JoinSessionAsync(
+                new JoinSessionRequest(studentId, session.Id));
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(
+                $"Failed to join the session.\n\n{ex.Message}",
+                "Elysium",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+            return;
+        }
+
         _activeSessionId = session.Id;
-        SessionPanel.Initialize(session);
+        SessionPanel.Initialize(session, joinResponse);
 
         DashboardContent.Visibility = Visibility.Collapsed;
         ProfilePanel.Visibility = Visibility.Collapsed;
         EnrollPanel.Visibility = Visibility.Collapsed;
         CourseDetailsPanel.Visibility = Visibility.Collapsed;
         SessionPanel.Visibility = Visibility.Visible;
-
-        try
-        {
-            await SessionHubService.JoinSessionAsync(session.Id);
-        }
-        catch
-        {
-        }
     }
 
     private async void OnLeaveSessionRequested(object? sender, EventArgs e)
@@ -196,12 +231,31 @@ public partial class StudentView : Window
 
         if (sessionId is int id)
         {
+            var currentUser = (AuthResponse)Application.Current.Resources["CurrentUser"]!;
+            if (currentUser.StudentId is not int studentId)
+            {
+                MessageBox.Show(
+                    "Student profile not found. Please contact support.",
+                    "Elysium",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+                return;
+            }
+
             try
             {
-                await SessionHubService.LeaveSessionAsync(id);
+                await SessionHubService.LeaveSessionAsync(
+                    new LeaveSessionRequest(studentId, id));
             }
-            catch
+            catch (Exception ex)
             {
+                _activeSessionId = id;
+                MessageBox.Show(
+                    $"Failed to leave the session.\n\n{ex.Message}",
+                    "Elysium",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+                return;
             }
         }
 

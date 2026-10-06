@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
+using Elysium.WPF.Models;
 using Elysium.WPF.Models.Courses;
 using Elysium.WPF.Models.Sessions;
 using Elysium.WPF.Presenters;
@@ -98,6 +99,7 @@ public partial class TeacherCourseDetailsView : UserControl
 
         _presenter = new TeacherCourseDetailsPresenter(
             (ISessionService)Application.Current.Resources["SessionService"]!,
+            (ISessionHubService)Application.Current.Resources["SessionHubService"]!,
             (IValidationService)Application.Current.Resources["ValidationService"]!
         );
         _presenter.SessionsLoaded += Presenter_SessionsLoaded;
@@ -179,13 +181,24 @@ public partial class TeacherCourseDetailsView : UserControl
         if (_presenter is null || _currentCourse is null)
             return;
 
+        var currentUser = (AuthResponse)Application.Current.Resources["CurrentUser"]!;
+        if (currentUser.TeacherId is not int teacherId)
+        {
+            SessionGeneralError.Text = "Teacher profile not found. Please contact support.";
+            return;
+        }
+
         CreateSessionButton.IsEnabled = false;
         SessionCreateLoadingPanel.Visibility = Visibility.Visible;
         SessionGeneralError.Text = string.Empty;
 
         try
         {
-            await _presenter.HandleCreateSessionAsync(_currentCourse, SessionNameInput.Text, SessionDescriptionInput.Text);
+            await _presenter.HandleCreateSessionAsync(
+                _currentCourse,
+                SessionNameInput.Text,
+                SessionDescriptionInput.Text,
+                teacherId);
         }
         finally
         {

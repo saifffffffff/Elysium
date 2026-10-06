@@ -1,6 +1,7 @@
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
+using Elysium.WPF.Helpers;
 using Elysium.WPF.Models;
 using Elysium.WPF.Models.Courses;
 using Elysium.WPF.Models.Sessions;
@@ -48,6 +49,12 @@ public partial class TeacherView : Window
         _coursesPresenter.CourseCreated += Presenter_CourseCreated;
 
         LoadCourses();
+    }
+
+    protected override void OnSourceInitialized(EventArgs e)
+    {
+        base.OnSourceInitialized(e);
+        WindowAppearance.ApplySmallCornerRadius(this);
     }
 
     #region Custom chrome

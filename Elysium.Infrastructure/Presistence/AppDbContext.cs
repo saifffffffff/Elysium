@@ -19,7 +19,6 @@ public class AppDbContext : DbContext
     public DbSet<StudentSession> StudentSessions => Set<StudentSession>();
     public DbSet<TranscriptSegment> TranscriptSegments => Set<TranscriptSegment>();
     public DbSet<ConfusionFlag> ConfusionFlags => Set<ConfusionFlag>();
-    public DbSet<AiChat> AiChats => Set<AiChat>();
     public DbSet<AiChatMessage> AiChatMessages => Set<AiChatMessage>();
 
     

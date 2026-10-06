@@ -119,6 +119,9 @@ public partial class App : Application
         _sessionService = new SessionService(httpClient);
         this.Resources["SessionService"] = _sessionService;
 
+        // Create AI chat service
+        this.Resources["AiChatService"] = new AiChatService(httpClient);
+
         // Create session hub service
         this.Resources["SessionHubService"] = new SessionHubService();
 

@@ -10,4 +10,13 @@ public class SessionRepository(AppDbContext context) : Repository<Session>(conte
     {
         return await context.Sessions.Where(s => s.CourseId == courseId).ToListAsync(cancellationToken);
     }
+
+    public async Task<Session?> GetByIdWithTranscriptAsync(int sessionId , CancellationToken cancellationToken = default)
+    {
+        return await context.Sessions
+            .AsNoTracking()
+            .Where(s => s.Id == sessionId)
+            .Include(s => s.TranscriptSegments.OrderBy(t => t.StartTime))
+            .FirstOrDefaultAsync(cancellationToken);
+    }
 }

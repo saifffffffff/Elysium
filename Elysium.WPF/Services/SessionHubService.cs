@@ -16,7 +16,6 @@ public class SessionHubService : ISessionHubService
     private readonly HubConnection _courseConnection;
     private readonly HubConnection _sessionConnection;
     private readonly HashSet<int> _joinedCourseIds = new();
-    private readonly HashSet<int> _joinedSessionIds = new();
     private readonly object _lock = new();
 
     public event EventHandler<SessionDto>? SessionAdded;
@@ -56,11 +55,6 @@ public class SessionHubService : ISessionHubService
         {
             await RejoinCourseGroupsAsync();
         };
-
-        _sessionConnection.Reconnected += async _ =>
-        {
-            await RejoinSessionGroupsAsync();
-        };
     }
 
     /// <summary>
@@ -93,32 +87,39 @@ public class SessionHubService : ISessionHubService
     }
 
     /// <summary>
-    /// Join the SignalR group for a session to receive live session updates
+    /// Start a new session and return its id
     /// </summary>
-    public async Task JoinSessionAsync(int sessionId)
+    public async Task<int> StartSessionAsync(StartSessionRequest request)
     {
-        lock (_lock)
-        {
-            if (!_joinedSessionIds.Add(sessionId))
-                return;
-        }
-
         await EnsureConnectedAsync(_sessionConnection);
-        await _sessionConnection.InvokeAsync("JoinSession", sessionId);
+        return await _sessionConnection.InvokeAsync<int>("StartSession", request);
     }
 
     /// <summary>
-    /// Leave the SignalR group for a session
+    /// Join a session as a student and return the created student session id with the existing transcript
     /// </summary>
-    public async Task LeaveSessionAsync(int sessionId)
+    public async Task<JoinSessionResponse> JoinSessionAsync(JoinSessionRequest request)
     {
-        lock (_lock)
-        {
-            _joinedSessionIds.Remove(sessionId);
-        }
+        await EnsureConnectedAsync(_sessionConnection);
+        return await _sessionConnection.InvokeAsync<JoinSessionResponse>("JoinSession", request);
+    }
 
+    /// <summary>
+    /// Leave a session as a student
+    /// </summary>
+    public async Task LeaveSessionAsync(LeaveSessionRequest request)
+    {
         if (_sessionConnection.State == HubConnectionState.Connected)
-            await _sessionConnection.InvokeAsync("LeaveSession", sessionId);
+            await _sessionConnection.InvokeAsync("LeaveSession", request);
+    }
+
+    /// <summary>
+    /// End a live session
+    /// </summary>
+    public async Task EndSessionAsync(int sessionId)
+    {
+        await EnsureConnectedAsync(_sessionConnection);
+        await _sessionConnection.InvokeAsync("EndSession", sessionId);
     }
 
     /// <summary>
@@ -138,7 +139,6 @@ public class SessionHubService : ISessionHubService
         lock (_lock)
         {
             _joinedCourseIds.Clear();
-            _joinedSessionIds.Clear();
         }
 
         if (_courseConnection.State != HubConnectionState.Disconnected)
@@ -169,24 +169,6 @@ public class SessionHubService : ISessionHubService
         foreach (var courseId in courseIds)
         {
             await _courseConnection.InvokeAsync("JoinCourseGroup", courseId);
-        }
-    }
-
-    private async Task RejoinSessionGroupsAsync()
-    {
-        List<int> sessionIds;
-        lock (_lock)
-        {
-            sessionIds = _joinedSessionIds.ToList();
-        }
-
-        if (sessionIds.Count == 0)
-            return;
-
-        await EnsureConnectedAsync(_sessionConnection);
-        foreach (var sessionId in sessionIds)
-        {
-            await _sessionConnection.InvokeAsync("JoinSession", sessionId);
         }
     }
 }

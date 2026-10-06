@@ -2,9 +2,8 @@
 
 namespace Elysium.Domain.Models;
 
-public class TranscriptSegment
+public class TranscriptSegment : BaseEntity
 {
-    public int Id { get; private set; }
     public int SessionId { get; private set; }
     public int StartTime { get; private set; }
     public int EndTime { get; private set; }
@@ -69,4 +68,7 @@ public class TranscriptSegment
 
         return Result.Success();
     }
+
+    public override string ToString() => this.Text;
+    
 }

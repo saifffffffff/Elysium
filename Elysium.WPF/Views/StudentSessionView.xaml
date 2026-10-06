@@ -115,7 +115,7 @@
                                    FontSize="17"
                                    FontWeight="SemiBold"
                                    Foreground="{StaticResource TextPrimaryBrush}"/>
-                        <TextBlock Text="Answers based on this session's transcript (coming soon)."
+                        <TextBlock Text="Answers based on this session's transcript."
                                    FontSize="12"
                                    Foreground="{StaticResource TextSecondaryBrush}"
                                    TextWrapping="Wrap"
@@ -150,11 +150,62 @@
                                                        FontSize="11"
                                                        FontWeight="SemiBold"
                                                        Foreground="{StaticResource AccentBrush}"/>
-                                            <TextBlock Text="{Binding Text}"
-                                                       FontSize="13"
-                                                       Foreground="{StaticResource TextPrimaryBrush}"
-                                                       TextWrapping="Wrap"
-                                                       Margin="0,2,0,0"/>
+                                            <Grid Margin="0,2,0,0">
+                                                <TextBlock Text="{Binding Text}"
+                                                           FontSize="13"
+                                                           Foreground="{StaticResource TextPrimaryBrush}"
+                                                           TextWrapping="Wrap">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsPending}" Value="True">
+                                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+
+                                                <StackPanel Orientation="Horizontal"
+                                                            VerticalAlignment="Center">
+                                                    <StackPanel.Style>
+                                                        <Style TargetType="StackPanel">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsPending}" Value="True">
+                                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </StackPanel.Style>
+                                                    <StackPanel.Triggers>
+                                                        <EventTrigger RoutedEvent="Loaded">
+                                                            <BeginStoryboard>
+                                                                <Storyboard RepeatBehavior="Forever">
+                                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                                                     From="0.3"
+                                                                                     To="1"
+                                                                                     Duration="0:0:0.7"
+                                                                                     AutoReverse="True"
+                                                                                     RepeatBehavior="Forever"/>
+                                                                </Storyboard>
+                                                            </BeginStoryboard>
+                                                        </EventTrigger>
+                                                    </StackPanel.Triggers>
+                                                    <Ellipse Width="6"
+                                                             Height="6"
+                                                             Margin="0,0,4,0"
+                                                             Fill="{StaticResource AccentBrush}"/>
+                                                    <Ellipse Width="6"
+                                                             Height="6"
+                                                             Margin="0,0,4,0"
+                                                             Fill="{StaticResource AccentBrush}"/>
+                                                    <Ellipse Width="6"
+                                                             Height="6"
+                                                             Fill="{StaticResource AccentBrush}"/>
+                                                </StackPanel>
+                                            </Grid>
                                         </StackPanel>
                                     </Border>
                                 </DataTemplate>

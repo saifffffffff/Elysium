@@ -2,9 +2,8 @@
 
 namespace Elysium.Domain.Models;
 
-public class Student
+public class Student : BaseEntity
 {
-    public int Id { get; private set; }
     public int UserId { get; private set; }
 
     public User User { get; private set; } = default!;

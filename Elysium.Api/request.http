@@ -2,5 +2,23 @@
 
 @baseUrl = https://localhost:7250
 
-### Get
+### test-configuraitons
 {{baseUrl}}/test/stt-configuration
+
+### get-all-users
+{{baseUrl}}/api/users
+
+
+### test ai chat endpoint 
+POST {{baseUrl}}/api/sessions/ai-chat
+Content-Type: application/json
+Accept: text/event-stream
+
+{
+  "studentSessionId": 3,
+  "question": ""
+}
+
+
+### old deepgram api key : fcad5ae94a334c6983786b5797a81aae7be9eae9
+### new deepgram api key : eb6918d3324a5582aac2a8b1e8e47bca5a1059d4

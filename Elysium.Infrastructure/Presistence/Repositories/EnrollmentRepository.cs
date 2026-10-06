@@ -14,8 +14,16 @@ public class EnrollmentRepository(AppDbContext context) : Repository<Enrollment>
     public async Task<IReadOnlyList<Enrollment>> GetAllByStudentAsync(int studentId, CancellationToken cancellationToken = default)
     {
         return await context.Enrollments
+            .AsNoTracking()
             .Where(e => e.StudentId == studentId)
             .Include(e => e.Course)
             .ToListAsync(cancellationToken);
+    }
+
+    public async Task<bool> IsStudentEnrolled(int studentId, int courseId, CancellationToken cancellationToken = default)
+    {
+        return await context.Enrollments
+            .AsNoTracking()
+            .AnyAsync(enrollment => enrollment.StudentId == studentId && enrollment.CourseId == courseId);
     }
 }

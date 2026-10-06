@@ -3,10 +3,9 @@ using System.ComponentModel;
 
 namespace Elysium.Domain.Models;
 
-public class Teacher
+public class Teacher : BaseEntity
 {
 
-    public int Id { get; private set; }
     public int UserId { get; private set; }
 
     public Teacher() { }

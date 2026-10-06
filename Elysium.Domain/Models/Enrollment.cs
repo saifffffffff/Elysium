@@ -1,6 +1,6 @@
 ﻿namespace Elysium.Domain.Models;
 
-public class Enrollment
+public class Enrollment : BaseEntity
 {
 
     private Enrollment() { }

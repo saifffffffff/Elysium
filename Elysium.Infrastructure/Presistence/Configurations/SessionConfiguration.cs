@@ -52,5 +52,7 @@ public class SessionConfiguration : IEntityTypeConfiguration<Session>
         builder.HasMany(x => x.StudentSessions).WithOne(x => x.Session).HasForeignKey(x => x.SessionId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        
+
     }
 }

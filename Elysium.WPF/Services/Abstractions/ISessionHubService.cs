@@ -33,14 +33,24 @@ public interface ISessionHubService
     Task LeaveCourseGroupAsync(int courseId);
 
     /// <summary>
-    /// Join the SignalR group for a session to receive live session updates
+    /// Start a new session and return its id
     /// </summary>
-    Task JoinSessionAsync(int sessionId);
+    Task<int> StartSessionAsync(StartSessionRequest request);
 
     /// <summary>
-    /// Leave the SignalR group for a session
+    /// Join a session as a student and return the created student session id with the existing transcript
     /// </summary>
-    Task LeaveSessionAsync(int sessionId);
+    Task<JoinSessionResponse> JoinSessionAsync(JoinSessionRequest request);
+
+    /// <summary>
+    /// Leave a session as a student
+    /// </summary>
+    Task LeaveSessionAsync(LeaveSessionRequest request);
+
+    /// <summary>
+    /// End a live session
+    /// </summary>
+    Task EndSessionAsync(int sessionId);
 
     /// <summary>
     /// Stream audio chunks to the server for transcription; completes when the stream ends or is cancelled

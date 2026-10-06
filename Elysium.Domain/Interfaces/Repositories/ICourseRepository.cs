@@ -6,4 +6,5 @@ public interface ICourseRepository : IRepository<Course>
 {
     Task<Course?> GetByCodeAsync(string code, CancellationToken cancellationToken = default);
     Task<Course?> GetByIdWithSessionsAsync(int Id, CancellationToken cancellationToken = default);
+    Task<bool> IsTeacherAssignedToCourse(int teacherId, int courseId, CancellationToken cancellationToken = default);
 }

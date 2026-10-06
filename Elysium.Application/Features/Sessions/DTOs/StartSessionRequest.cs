@@ -2,9 +2,9 @@
 
 namespace Elysium.Application.Features.Sessions.DTOs;
 
-public record CreateSessionRequest(string name, string? description, int courseId);
+public record StartSessionRequest(string name, string? description, int courseId, int teacherId);
 
-public class CreateSessionRequestValidator : AbstractValidator<CreateSessionRequest>
+public class CreateSessionRequestValidator : AbstractValidator<StartSessionRequest>
 {
     public CreateSessionRequestValidator()
     {
@@ -22,5 +22,10 @@ public class CreateSessionRequestValidator : AbstractValidator<CreateSessionRequ
         RuleFor(request => request.courseId)
             .GreaterThan(0)
             .WithMessage("Course id must be greater than 0.");
+
+        RuleFor(request => request.teacherId)
+            .GreaterThan(0)
+            .WithMessage("Teacher id must be greater than 0.");
+
     }
 }

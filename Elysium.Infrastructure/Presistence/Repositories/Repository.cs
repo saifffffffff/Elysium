@@ -1,9 +1,11 @@
 ﻿using Elysium.Domain.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
+using Elysium.Domain.Models;
 namespace Elysium.Infrastructure.Presistence.Repositories;
 
-public class Repository<T>(DbContext context) : IRepository<T> where T : class
+public class Repository<T>(DbContext context) : IRepository<T> where T : BaseEntity
 {
 
     readonly DbSet<T> _dbSet = context.Set<T>();
@@ -21,6 +23,11 @@ public class Repository<T>(DbContext context) : IRepository<T> where T : class
     public void Delete(T entity)
     {
         _dbSet.Remove(entity);
+    }
+
+    public async Task  DeleteByIdAsync(int id)
+    {
+        await _dbSet.Where(entity => entity.Id == id).ExecuteDeleteAsync();
     }
 
     public async Task<bool> ExistsAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)

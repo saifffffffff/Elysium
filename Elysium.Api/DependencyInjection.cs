@@ -1,5 +1,7 @@
 ﻿
 using Elysium.Api.Hubs;
+using Elysium.Application.Features.AiChat.DTOs;
+using Elysium.Application.Features.AiChat.Services;
 using Elysium.Application.Features.Courses.DTOs;
 using Elysium.Application.Features.Courses.Services;
 using Elysium.Application.Features.Enrollments.Services;
@@ -57,7 +59,6 @@ public static class DependencyInjection
         services.AddScoped<IStudentSessionRepository, StudentSessionRepository>();
         services.AddScoped<ITranscriptSegmentRepository, TranscriptSegmentRepository>();
         services.AddScoped<IConfusionFlagRepository, ConfusionFlagRepository>();
-        services.AddScoped<IAiChatRepository, AiChatRepository>();
         services.AddScoped<IAiChatMessageRepository, AiChatMessageRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -74,6 +75,7 @@ public static class DependencyInjection
         services.AddScoped<ICourseService, CourseService>();
         services.AddScoped<IEnrollmentService, EnrollmentService>();
         services.AddScoped<ISessionService, SessionService>();
+        services.AddScoped<IAiChatService, AiChatService>();
         services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
         services.AddScoped<ICodeGenerator, CodeGenerator>();
 
@@ -89,22 +91,28 @@ public static class DependencyInjection
         services.AddScoped<IValidator<ChangeUsernameRequest>, ChangeUsernameRequestValidator>();
         services.AddScoped<IValidator<ChangePasswordRequest>, ChangePasswordRequestValidator>();
         services.AddScoped<IValidator<CreateCourseRequest>, CreateCourseRequestValidator>();
-        services.AddScoped<IValidator<CreateSessionRequest>, CreateSessionRequestValidator>();
-
+        services.AddScoped<IValidator<StartSessionRequest>, CreateSessionRequestValidator>();
+        services.AddScoped<IValidator<JoinSessionRequest>, JoinSessionRequestValidator>();
+        services.AddScoped<IValidator<LeaveSessionRequest>, LeaveSessionRequestValidator>();
+        services.AddScoped<IValidator<StreamChatRequest>, StreamChatRequestValidator>();
         return services;
     }
 
 
-    public static IServiceCollection AddRealtimeAndAudioServices(this IServiceCollection services , IConfiguration configuration)
+    public static IServiceCollection AddRealtimeServices(this IServiceCollection services , IConfiguration configuration)
     {
         services.AddSingleton<ConnectionTracker>();
         services.AddSingleton<ITranscriptionProvider, DeepgramTranscriptionProvider>();
+        services.AddSingleton<ILlmProvider, OpenRouterProvider>();
+
         services.AddScoped<ISessionNotifier, SessionNotifier>();
         services.AddScoped<ISpeechToTextService, SpeechToTextService>();
-
+        
         services.Configure<SttOptions>(configuration.GetSection(SttOptions.SectionName));
+        services.Configure<LlmOptions>(configuration.GetSection(LlmOptions.SectionName));
         
         return services;
 
     }
+    
 }

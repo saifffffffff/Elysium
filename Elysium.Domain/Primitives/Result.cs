@@ -47,6 +47,7 @@ public class Result
 
     public static implicit operator Result(string errorMessage) => Failure(errorMessage);
 
+    public static implicit operator Result(List<Error> errors) => Failure(errors);
 
 }
 

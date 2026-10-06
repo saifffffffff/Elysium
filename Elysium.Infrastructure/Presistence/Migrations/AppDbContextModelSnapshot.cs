@@ -22,24 +22,6 @@ namespace Elysium.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Elysium.Domain.Models.AiChat", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("StudentSessionId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StudentSessionId");
-
-                    b.ToTable("AiChats");
-                });
-
             modelBuilder.Entity("Elysium.Domain.Models.AiChatMessage", b =>
                 {
                     b.Property<int>("Id")
@@ -48,9 +30,6 @@ namespace Elysium.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AiChatId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Answer")
                         .HasColumnType("nvarchar(max)");
 
@@ -58,17 +37,27 @@ namespace Elysium.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("AskedAt")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<string>("Question")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("StudentSessionId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("AiChatId");
+                    b.HasIndex("StudentSessionId");
 
-                    b.ToTable("AiChatMessages");
+                    b.ToTable("AiChatMessages", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_AiChatMessages_Dates", "(AnsweredAt IS NULL OR AnsweredAt > AskedAt)");
+
+                            t.HasCheckConstraint("CK_AiChatMessages_Question", "LEN(TRIM(Question)) > 0");
+                        });
                 });
 
             modelBuilder.Entity("Elysium.Domain.Models.ConfusionFlag", b =>
@@ -151,6 +140,9 @@ namespace Elysium.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
                     b.HasKey("StudentId", "CourseId");
 
@@ -277,6 +269,11 @@ namespace Elysium.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsInSession")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
 
                     b.Property<DateTime>("JoinedAt")
                         .HasColumnType("datetime2");
@@ -408,26 +405,15 @@ namespace Elysium.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Elysium.Domain.Models.AiChat", b =>
+            modelBuilder.Entity("Elysium.Domain.Models.AiChatMessage", b =>
                 {
                     b.HasOne("Elysium.Domain.Models.StudentSession", "StudentSession")
-                        .WithMany("AiChats")
+                        .WithMany("AiChatMessages")
                         .HasForeignKey("StudentSessionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("StudentSession");
-                });
-
-            modelBuilder.Entity("Elysium.Domain.Models.AiChatMessage", b =>
-                {
-                    b.HasOne("Elysium.Domain.Models.AiChat", "AiChat")
-                        .WithMany("Messages")
-                        .HasForeignKey("AiChatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AiChat");
                 });
 
             modelBuilder.Entity("Elysium.Domain.Models.ConfusionFlag", b =>
@@ -545,11 +531,6 @@ namespace Elysium.Infrastructure.Migrations
                     b.Navigation("Session");
                 });
 
-            modelBuilder.Entity("Elysium.Domain.Models.AiChat", b =>
-                {
-                    b.Navigation("Messages");
-                });
-
             modelBuilder.Entity("Elysium.Domain.Models.Course", b =>
                 {
                     b.Navigation("Enrollments");
@@ -575,7 +556,7 @@ namespace Elysium.Infrastructure.Migrations
 
             modelBuilder.Entity("Elysium.Domain.Models.StudentSession", b =>
                 {
-                    b.Navigation("AiChats");
+                    b.Navigation("AiChatMessages");
 
                     b.Navigation("ConfusionFlags");
                 });

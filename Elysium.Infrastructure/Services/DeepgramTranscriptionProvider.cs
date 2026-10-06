@@ -38,6 +38,7 @@ public sealed class DeepgramTranscriptionProvider : ITranscriptionProvider
 
     public async IAsyncEnumerable<TranscriptionSegmentDto> StreamAsync(IAsyncEnumerable<ReadOnlyMemory<byte>> audioChunks,  [EnumeratorCancellation] CancellationToken ct)
     {
+        
         EnsureInitialized();
 
         var channel = Channel.CreateUnbounded<TranscriptionSegmentDto>(
@@ -46,8 +47,13 @@ public sealed class DeepgramTranscriptionProvider : ITranscriptionProvider
                             SingleReader = true,
                             SingleWriter = true
                         });
+        
+        var options = new DeepgramWsClientOptions(
+            apiKey: _options.Deepgram.ApiKey,
+            baseAddress: null,
+            keepAlive: true);
 
-        var liveClient = ClientFactory.CreateListenWebSocketClient(_options.Deepgram.ApiKey , new DeepgramWsClientOptions { KeepAlive = true });
+        var liveClient = ClientFactory.CreateListenWebSocketClient(options: options);
 
 
         await liveClient.Subscribe(

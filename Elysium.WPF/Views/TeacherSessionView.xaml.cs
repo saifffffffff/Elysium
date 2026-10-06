@@ -35,7 +35,6 @@ public partial class TeacherSessionView : UserControl
         if (_presenter is null)
         {
             _presenter = new TeacherSessionPresenter(
-                (ISessionService)Application.Current.Resources["SessionService"]!,
                 (ISessionHubService)Application.Current.Resources["SessionHubService"]!,
                 (IMicrophoneService)Application.Current.Resources["MicrophoneService"]!
             );

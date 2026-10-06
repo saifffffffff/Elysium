@@ -10,7 +10,6 @@ namespace Elysium.WPF.Presenters;
 /// </summary>
 public class TeacherSessionPresenter
 {
-    private readonly ISessionService _sessionService;
     private readonly ISessionHubService _sessionHubService;
     private readonly IMicrophoneService _microphone;
     private CancellationTokenSource? _streamCts;
@@ -37,9 +36,8 @@ public class TeacherSessionPresenter
     /// </summary>
     public bool IsMuted { get; private set; }
 
-    public TeacherSessionPresenter(ISessionService sessionService, ISessionHubService sessionHubService, IMicrophoneService microphone)
+    public TeacherSessionPresenter(ISessionHubService sessionHubService, IMicrophoneService microphone)
     {
-        _sessionService = sessionService;
         _sessionHubService = sessionHubService;
         _microphone = microphone;
         _microphone.Failed += Microphone_Failed;
@@ -99,13 +97,13 @@ public class TeacherSessionPresenter
         {
             Stop();
 
-            if (await _sessionService.EndSessionAsync(sessionId))
-            {
-                SessionEnded?.Invoke(this, EventArgs.Empty);
-                return true;
-            }
-
-            EndSessionFailed?.Invoke(this, _sessionService.GetLastError() ?? "Failed to end session.");
+            await _sessionHubService.EndSessionAsync(sessionId);
+            SessionEnded?.Invoke(this, EventArgs.Empty);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            EndSessionFailed?.Invoke(this, ex.Message);
             return false;
         }
         finally
@@ -123,7 +121,6 @@ public class TeacherSessionPresenter
 
         try
         {
-            await _sessionHubService.JoinSessionAsync(sessionId);
             await _microphone.StartAsync();
             await _sessionHubService.StreamVoiceAsync(sessionId, _microphone.GetChunks(cancellationToken), cancellationToken);
         }

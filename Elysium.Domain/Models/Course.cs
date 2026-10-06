@@ -5,9 +5,8 @@ using System.Text.RegularExpressions;
 
 namespace Elysium.Domain.Models;
 
-public class Course
+public class Course : BaseEntity
 {
-    public int Id { get; private  set; }
     public string Name { get; private set; } = default!;
     public string? Description { get; private set; }
     public string Code { get; private set; } = default!;

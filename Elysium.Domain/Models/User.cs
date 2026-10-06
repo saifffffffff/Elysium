@@ -4,9 +4,8 @@ using System.Runtime.InteropServices;
 
 namespace Elysium.Domain.Models;
 
-public class User
+public class User : BaseEntity
 {
-    public int Id { get; private set; }
     public string Username { get; private set; } = default!;
     public string PasswordHash { get; private set; } = default!;
     public string FirstName { get; private set; } = default!;

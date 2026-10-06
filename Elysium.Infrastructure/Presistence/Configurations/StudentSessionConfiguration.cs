@@ -10,6 +10,10 @@ public class StudentSessionConfiguration : IEntityTypeConfiguration<StudentSessi
     {
         builder.HasIndex(ss => new { ss.StudentId, ss.SessionId }).IsUnique();
 
+        builder.Property(x => x.IsInSession)
+            .IsRequired()
+            .HasDefaultValue(true);
+
         builder.HasOne(ss => ss.Student)
             .WithMany(s => s.StudentSessions)
             .HasForeignKey(ss => ss.StudentId)
@@ -19,5 +23,8 @@ public class StudentSessionConfiguration : IEntityTypeConfiguration<StudentSessi
             .WithMany(s => s.StudentSessions)
             .HasForeignKey(ss => ss.SessionId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        
+            
     }
 }

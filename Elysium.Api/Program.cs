@@ -6,9 +6,7 @@ using Scalar.AspNetCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-
-// ai 
-// stt service 
+ 
 
 builder.Services.AddOpenApi();
 
@@ -18,7 +16,7 @@ builder.Services.AddDatabase(builder.Configuration);
 builder.Services.AddApplicationServices();
 builder.Services.AddRepositories();
 builder.Services.AddValidators();
-builder.Services.AddRealtimeAndAudioServices(builder.Configuration);
+builder.Services.AddRealtimeServices(builder.Configuration);
 
 var app = builder.Build();
 

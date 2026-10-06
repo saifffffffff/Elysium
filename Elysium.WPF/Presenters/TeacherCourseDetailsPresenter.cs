@@ -12,6 +12,7 @@ namespace Elysium.WPF.Presenters;
 public class TeacherCourseDetailsPresenter
 {
     private readonly ISessionService _sessionService;
+    private readonly ISessionHubService _sessionHubService;
     private readonly IValidationService _validationService;
 
     public event EventHandler<List<SessionDto>>? SessionsLoaded;
@@ -23,9 +24,13 @@ public class TeacherCourseDetailsPresenter
     private bool _isLoadingSessions;
     private bool _isCreatingSession;
 
-    public TeacherCourseDetailsPresenter(ISessionService sessionService, IValidationService validationService)
+    public TeacherCourseDetailsPresenter(
+        ISessionService sessionService,
+        ISessionHubService sessionHubService,
+        IValidationService validationService)
     {
         _sessionService = sessionService;
+        _sessionHubService = sessionHubService;
         _validationService = validationService;
     }
 
@@ -59,7 +64,7 @@ public class TeacherCourseDetailsPresenter
     /// <summary>
     /// Validate and create a new session for the given course
     /// </summary>
-    public async Task HandleCreateSessionAsync(CourseDto course, string name, string? description)
+    public async Task HandleCreateSessionAsync(CourseDto course, string name, string? description, int teacherId)
     {
         if (_isCreatingSession)
             return;
@@ -72,24 +77,23 @@ public class TeacherCourseDetailsPresenter
             return;
         }
 
-        var request = new CreateSessionRequest(
+        var request = new StartSessionRequest(
             name.Trim(),
             string.IsNullOrWhiteSpace(description) ? null : description.Trim(),
-            course.Id);
+            course.Id,
+            teacherId);
 
         _isCreatingSession = true;
         try
         {
-            var sessionId = await _sessionService.CreateAsync(request);
-
-            if (sessionId is null)
-            {
-                SessionCreateFailed?.Invoke(this, _sessionService.GetLastError() ?? "Failed to create session.");
-                return;
-            }
+            var sessionId = await _sessionHubService.StartSessionAsync(request);
 
             ValidationErrorsChanged?.Invoke(this, new List<ValidationError>());
-            SessionCreated?.Invoke(this, sessionId.Value);
+            SessionCreated?.Invoke(this, sessionId);
+        }
+        catch (Exception ex)
+        {
+            SessionCreateFailed?.Invoke(this, ex.Message);
         }
         finally
         {

@@ -1,8 +1,9 @@
 ﻿using System.Linq.Expressions;
+using Elysium.Domain.Models;
 
 namespace Elysium.Domain.Interfaces.Repositories;
 
-public interface IRepository<T> where T : class
+public interface IRepository<T> where T : BaseEntity
 {
     Task<T?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
     Task<IReadOnlyList<T>> GetAllAsync(CancellationToken cancellationToken = default);
@@ -13,6 +14,6 @@ public interface IRepository<T> where T : class
     Task AddAsync(T entity, CancellationToken cancellationToken = default);
     void Update(T entity);
     void Delete(T entity);
-
+    Task DeleteByIdAsync(int id);
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

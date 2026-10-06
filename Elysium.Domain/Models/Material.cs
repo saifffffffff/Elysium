@@ -1,8 +1,7 @@
 ﻿namespace Elysium.Domain.Models;
 
-public class Material
+public class Material : BaseEntity
 {
-    public int Id { get; set; }
     public int SessionId { get; set; }
     public string Name { get; set; } = default!;
     public string StoredPath { get; set; } = default!;
